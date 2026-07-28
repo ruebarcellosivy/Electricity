@@ -38,8 +38,10 @@ export class RegisterComplaintComponent implements OnInit {
   readonly submitting = signal(false);
   readonly result = signal<Complaint | null>(null);
 
+  readonly selectedComplaintType = signal<string>('');
+
   readonly categoryOptions = computed(() => {
-    const type = this.form?.controls.complaintType.value;
+    const type = this.selectedComplaintType();
     return type ? this.categoriesMap()[type] || [] : [];
   });
 
@@ -64,7 +66,10 @@ export class RegisterComplaintComponent implements OnInit {
       this.form.controls.contactDetails.setValue(profile.email);
     });
 
-    this.form.controls.complaintType.valueChanges.subscribe(() => this.form.controls.category.setValue(''));
+    this.form.controls.complaintType.valueChanges.subscribe((type) => {
+      this.selectedComplaintType.set(type);
+      this.form.controls.category.setValue('');
+    });
     this.form.controls.preferredContactMethod.valueChanges.subscribe((method) => {
       this.customerService.myProfile().subscribe((profile) => {
         this.form.controls.contactDetails.setValue(method === 'EMAIL' ? profile.email : profile.mobileNumber);
