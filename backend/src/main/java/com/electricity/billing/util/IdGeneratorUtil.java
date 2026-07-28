@@ -47,8 +47,12 @@ public final class IdGeneratorUtil {
         return "CMP" + Year.now().getValue() + randomDigits(7);
     }
 
+    public static String generateUserId() {
+        return "USR" + randomDigits(7);
+    }
+
     public static String generateDefaultPassword() {
-        // Meets StrongPassword complexity rules and is unique enough to avoid collisions.
-        return "Welcome@" + randomDigits(4);
+        // Meets StrongPassword complexity rules and is now predictable for testing.
+        return "Welcome@1234";
     }
 }

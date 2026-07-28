@@ -23,15 +23,23 @@
       <form [formGroup]="form" (ngSubmit)="submit()" class="bill-form">
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Consumer Number</mat-label>
-          <input matInput formControlName="consumerNumber" maxlength="13" placeholder="13-digit consumer number" />
+          <mat-select formControlName="consumerNumber">
+            @for (consumer of consumers(); track consumer.id) {
+              <mat-option [value]="consumer.consumerNumber">{{ consumer.consumerNumber }} ({{ consumer.customerName }})</mat-option>
+            }
+          </mat-select>
           @if (form.controls.consumerNumber.touched && form.controls.consumerNumber.hasError('consumerNumber')) {
-            <mat-error>Please enter a valid Consumer Number.</mat-error>
+            <mat-error>Please select a valid Consumer Number.</mat-error>
           }
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Billing Period</mat-label>
-          <input matInput formControlName="billingPeriod" placeholder="e.g. JUL-2026" />
+          <mat-select formControlName="billingPeriod">
+            @for (period of billingPeriods(); track period) {
+              <mat-option [value]="period">{{ period }}</mat-option>
+            }
+          </mat-select>
           @if (form.controls.billingPeriod.touched && form.controls.billingPeriod.hasError('required')) {
             <mat-error>Billing period is required.</mat-error>
           }

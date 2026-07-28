@@ -44,6 +44,10 @@
           <th mat-header-cell *matHeaderCellDef>Customer ID</th>
           <td mat-cell *matCellDef="let c">{{ c.customerCode }}</td>
         </ng-container>
+        <ng-container matColumnDef="userId">
+          <th mat-header-cell *matHeaderCellDef>User ID</th>
+          <td mat-cell *matCellDef="let c"><strong>{{ c.userId }}</strong></td>
+        </ng-container>
         <ng-container matColumnDef="fullName">
           <th mat-header-cell *matHeaderCellDef>Name</th>
           <td mat-cell *matCellDef="let c">{{ c.fullName }}</td>

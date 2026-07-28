@@ -10,7 +10,6 @@ import lombok.Data;
 public class ComplaintRequest {
 
     @NotBlank(message = "Please select a Consumer Number.")
-    @Pattern(regexp = "\\d{13}", message = "Please select a valid Consumer Number.")
     private String consumerNumber;
 
     @NotNull(message = "Complaint type is required.")

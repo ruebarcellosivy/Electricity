@@ -39,12 +39,15 @@ public class ConsumerServiceImpl implements ConsumerService {
         Customer customer = customerRepository.findById(request.getCustomerId())
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + request.getCustomerId()));
 
-        if (consumerRepository.existsByConsumerNumber(request.getConsumerNumber())) {
-            throw new DuplicateRecordException("This Consumer Number is already registered.");
+        long count = consumerRepository.count();
+        String generatedConsumerNumber = "CON" + (count + 1);
+        while (consumerRepository.existsByConsumerNumber(generatedConsumerNumber)) {
+            count++;
+            generatedConsumerNumber = "CON" + (count + 1);
         }
 
         Consumer consumer = consumerRepository.save(Consumer.builder()
-                .consumerNumber(request.getConsumerNumber())
+                .consumerNumber(generatedConsumerNumber)
                 .customer(customer)
                 .connectionStatus(ConnectionStatus.CONNECTED)
                 .build());

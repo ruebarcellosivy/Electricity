@@ -15,7 +15,6 @@ import java.time.LocalDate;
 public class AddBillRequest implements DateRangeValidatable {
 
     @NotBlank(message = "Please enter a valid Consumer Number.")
-    @Pattern(regexp = "\\d{13}", message = "Please enter a valid Consumer Number.")
     private String consumerNumber;
 
     @NotBlank(message = "Billing period is required.")

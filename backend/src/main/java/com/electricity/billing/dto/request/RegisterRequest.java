@@ -14,7 +14,6 @@ import lombok.Data;
 public class RegisterRequest implements PasswordConfirmable {
 
     @NotBlank(message = "Please enter a valid Consumer Number.")
-    @Pattern(regexp = "\\d{13}", message = "Please enter a valid Consumer Number.")
     private String consumerNumber;
 
     @NotBlank(message = "Full name cannot be empty.")

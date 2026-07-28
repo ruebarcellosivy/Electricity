@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -11,7 +11,9 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { CustomValidators } from '../../../shared/validators/custom-validators';
 import { BillService } from '../../../core/services/bill.service';
+import { ConsumerService } from '../../../core/services/consumer.service';
 import { Bill } from '../../../core/models/bill.model';
+import { Consumer } from '../../../core/models/consumer.model';
 
 @Component({
   selector: 'app-add-bill',
@@ -21,13 +23,17 @@ import { Bill } from '../../../core/models/bill.model';
   templateUrl: './add-bill.component.html',
   styleUrl: './add-bill.component.scss'
 })
-export class AddBillComponent {
+export class AddBillComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly billService = inject(BillService);
+  private readonly consumerService = inject(ConsumerService);
   private readonly router = inject(Router);
 
   readonly submitting = signal(false);
   readonly created = signal<Bill | null>(null);
+  
+  readonly consumers = signal<Consumer[]>([]);
+  readonly billingPeriods = signal<string[]>([]);
 
   readonly form = this.fb.nonNullable.group({
     consumerNumber: ['', [Validators.required, CustomValidators.consumerNumber()]],
@@ -39,6 +45,24 @@ export class AddBillComponent {
     lateFee: [0, [Validators.min(0)]],
     status: ['UNPAID']
   }, { validators: CustomValidators.dateNotBefore('billDate', 'dueDate') });
+
+  ngOnInit(): void {
+    this.consumerService.list(null, null, 0, 1000).subscribe(page => {
+      this.consumers.set(page.content);
+    });
+    this.billingPeriods.set(this.generateBillingPeriods());
+  }
+
+  private generateBillingPeriods(): string[] {
+    const periods: string[] = [];
+    const now = new Date();
+    const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+    for (let i = -6; i <= 6; i++) {
+      const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
+      periods.push(`${months[d.getMonth()]}-${d.getFullYear()}`);
+    }
+    return periods;
+  }
 
   submit(): void {
     if (this.form.invalid) {

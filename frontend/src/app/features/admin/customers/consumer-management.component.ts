@@ -52,8 +52,7 @@ export class ConsumerManagementComponent implements OnInit {
   readonly submitting = signal(false);
 
   readonly form = this.fb.nonNullable.group({
-    customerId: [0, [Validators.required, Validators.min(1)]],
-    consumerNumber: ['', [Validators.required, CustomValidators.consumerNumber()]]
+    customerId: [0, [Validators.required, Validators.min(1)]]
   });
 
   ngOnInit(): void {
@@ -94,8 +93,7 @@ export class ConsumerManagementComponent implements OnInit {
     this.consumerService.add(this.form.getRawValue()).subscribe({
       next: () => {
         this.submitting.set(false);
-        this.snackBar.open('Consumer Number linked successfully.', 'Close', { duration: 4000 });
-        this.form.controls.consumerNumber.reset('');
+        this.snackBar.open('Consumer Number auto-generated and linked successfully.', 'Close', { duration: 4000 });
         this.load();
       },
       error: () => this.submitting.set(false)

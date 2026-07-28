@@ -51,16 +51,20 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public CustomerResponse createCustomer(AdminCreateCustomerRequest request) {
-        if (userRepository.existsByUserId(request.getUserId())) {
-            throw new DuplicateRecordException("User ID already exists. Please choose a different User ID.");
-        }
         if (customerRepository.existsByEmail(request.getEmail())) {
             throw new DuplicateRecordException("Email already exists.");
         }
 
+        long userCount = userRepository.count();
+        String generatedUserId = "USR" + (userCount + 1);
+        while (userRepository.existsByUserId(generatedUserId)) {
+            userCount++;
+            generatedUserId = "USR" + (userCount + 1);
+        }
+
         User user = userRepository.save(User.builder()
-                .userId(request.getUserId())
-                .password(passwordEncoder.encode(IdGeneratorUtil.generateDefaultPassword()))
+                .userId(generatedUserId)
+                .password(passwordEncoder.encode(generatedUserId))
                 .role(Role.CUSTOMER)
                 .mustChangePassword(true)
                 .enabled(true)

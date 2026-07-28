@@ -13,7 +13,6 @@ export interface Consumer {
 
 export interface AddConsumerRequest {
   customerId: number;
-  consumerNumber: string;
 }
 
 export interface ConnectionStatusUpdateRequest {

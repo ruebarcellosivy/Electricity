@@ -19,7 +19,7 @@ import { ConfirmDialogComponent } from '../../../shared/components/confirm-dialo
 import { Customer } from '../../../core/models/customer.model';
 import { CUSTOMER_TYPES, ELECTRICAL_SECTIONS } from '../../../core/models/enums';
 
-const COLUMNS = ['customerCode', 'fullName', 'email', 'mobileNumber', 'customerType', 'electricalSection',
+const COLUMNS = ['customerCode', 'userId', 'fullName', 'email', 'mobileNumber', 'customerType', 'electricalSection',
   'consumerNumbers', 'status', 'actions'];
 
 @Component({

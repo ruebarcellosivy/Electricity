@@ -5,7 +5,7 @@ export class CustomValidators {
   static consumerNumber(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (!control.value) return null;
-      return /^\d{13}$/.test(control.value) ? null : { consumerNumber: true };
+      return /^[a-zA-Z0-9]+$/.test(control.value) ? null : { consumerNumber: true };
     };
   }
 

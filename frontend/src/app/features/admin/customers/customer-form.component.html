@@ -4,9 +4,10 @@
       <mat-icon class="success-icon">check_circle</mat-icon>
       <h2>Customer Added Successfully</h2>
       <div class="summary-row"><span>Customer ID</span><strong>{{ customer.customerCode }}</strong></div>
+      <div class="summary-row"><span>User ID</span><strong>{{ customer.userId }}</strong></div>
       <div class="summary-row"><span>Name</span><strong>{{ customer.fullName }}</strong></div>
       <div class="summary-row"><span>Email</span><strong>{{ customer.email }}</strong></div>
-      <p class="hint-text">Customer added successfully. Please add one or more Consumer Nos to complete the setup.</p>
+      <p class="hint-text">Customer added successfully. Please provide the User ID to the customer (which also serves as their default password), and add one or more Consumer Nos to complete the setup.</p>
       <div class="actions-row">
         <button mat-flat-button color="primary" (click)="goToAddConsumer()">Add Consumer Number</button>
         <button mat-stroked-button routerLink="/admin/customers">Back to Customer List</button>
@@ -89,16 +90,6 @@
             </mat-form-field>
           }
         </div>
-
-        @if (!isEditMode()) {
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>User ID</mat-label>
-            <input matInput formControlName="userId" placeholder="5-20 characters" />
-            @if (form.controls.userId.touched && form.controls.userId.hasError('required')) {
-              <mat-error>User ID is required.</mat-error>
-            }
-          </mat-form-field>
-        }
 
         <div class="actions-row">
           <button mat-stroked-button type="button" routerLink="/admin/customers">Cancel</button>

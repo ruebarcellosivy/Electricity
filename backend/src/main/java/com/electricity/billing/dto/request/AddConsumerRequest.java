@@ -9,10 +9,6 @@ import lombok.Data;
 @Data
 public class AddConsumerRequest {
 
-    @NotNull(message = "Customer is required.")
+    @NotNull(message = "Customer ID is required.")
     private Long customerId;
-
-    @NotBlank(message = "Please enter a valid Consumer Number.")
-    @Pattern(regexp = "\\d{13}", message = "Please enter a valid Consumer Number.")
-    private String consumerNumber;
 }

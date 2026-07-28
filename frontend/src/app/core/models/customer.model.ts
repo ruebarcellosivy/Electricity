@@ -22,7 +22,6 @@ export interface AdminCreateCustomerRequest {
   mobileNumber: string;
   customerType: string;
   electricalSection: string;
-  userId: string;
 }
 
 export interface UpdateCustomerRequest {

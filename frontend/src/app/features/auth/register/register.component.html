@@ -20,7 +20,7 @@
       <form [formGroup]="form" (ngSubmit)="submit()" class="auth-form">
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Consumer Number</mat-label>
-          <input matInput formControlName="consumerNumber" maxlength="13" placeholder="13-digit consumer number" />
+          <input matInput formControlName="consumerNumber" placeholder="e.g. CON123" />
           @if (form.controls.consumerNumber.touched && form.controls.consumerNumber.hasError('required')) {
             <mat-error>Please enter a valid Consumer Number.</mat-error>
           }

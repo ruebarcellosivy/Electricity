@@ -12,13 +12,7 @@
         <mat-label>Customer ID</mat-label>
         <input matInput type="number" formControlName="customerId" />
       </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Consumer Number</mat-label>
-        <input matInput formControlName="consumerNumber" maxlength="13" placeholder="13-digit consumer number" />
-        @if (form.controls.consumerNumber.touched && form.controls.consumerNumber.hasError('consumerNumber')) {
-          <mat-error>Please enter a valid Consumer Number.</mat-error>
-        }
-      </mat-form-field>
+
       <button mat-flat-button color="primary" type="submit" [disabled]="submitting()">Add</button>
     </form>
   </mat-card-content>

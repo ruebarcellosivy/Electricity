@@ -32,7 +32,4 @@ public class AdminCreateCustomerRequest {
     @NotNull(message = "Electrical section is required.")
     private ElectricalSection electricalSection;
 
-    @NotBlank(message = "User ID is required.")
-    @Size(min = 5, max = 20, message = "User ID must be between 5 and 20 characters.")
-    private String userId;
 }

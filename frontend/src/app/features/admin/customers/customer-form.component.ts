@@ -43,8 +43,7 @@ export class CustomerFormComponent implements OnInit {
     email: ['', [Validators.required, Validators.email]],
     mobileNumber: ['', [Validators.required, CustomValidators.mobileNumber()]],
     customerType: ['RESIDENTIAL', [Validators.required]],
-    electricalSection: ['REGION', [Validators.required]],
-    userId: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(20)]]
+    electricalSection: ['REGION', [Validators.required]]
   });
 
   ngOnInit(): void {
@@ -52,7 +51,6 @@ export class CustomerFormComponent implements OnInit {
     if (idParam) {
       this.isEditMode.set(true);
       this.customerId.set(Number(idParam));
-      this.form.controls.userId.disable();
       this.customerService.getById(Number(idParam)).subscribe((customer) => {
         this.existingCustomer.set(customer);
         this.form.patchValue(customer);
