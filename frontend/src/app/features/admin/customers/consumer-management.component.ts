@@ -100,8 +100,8 @@ export class ConsumerManagementComponent implements OnInit {
     });
   }
 
-  toggleConnection(consumer: Consumer): void {
-    const action = consumer.connectionStatus === 'CONNECTED' ? 'DISCONNECT' : 'RECONNECT';
+  onConnectionStatusChange(event: import('@angular/material/radio').MatRadioChange, consumer: Consumer): void {
+    const action = event.value === 'DISCONNECTED' ? 'DISCONNECT' : 'RECONNECT';
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
         title: action === 'DISCONNECT' ? 'Disconnect Consumer' : 'Reconnect Consumer',
@@ -110,10 +110,16 @@ export class ConsumerManagementComponent implements OnInit {
       }
     });
     dialogRef.afterClosed().subscribe((confirmed) => {
-      if (!confirmed) return;
-      this.consumerService.updateConnectionStatus(consumer.consumerNumber, { action }).subscribe(() => {
-        this.snackBar.open(`Consumer ${action === 'DISCONNECT' ? 'deactivated' : 'activated'} successfully.`, 'Close', { duration: 4000 });
-        this.load();
+      if (!confirmed) {
+        this.load(); // Revert visual state
+        return;
+      }
+      this.consumerService.updateConnectionStatus(consumer.consumerNumber, { action }).subscribe({
+        next: () => {
+          this.snackBar.open(`Consumer ${action === 'DISCONNECT' ? 'deactivated' : 'activated'} successfully.`, 'Close', { duration: 4000 });
+          this.load();
+        },
+        error: () => this.load()
       });
     });
   }

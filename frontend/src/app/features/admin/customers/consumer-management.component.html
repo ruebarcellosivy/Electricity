@@ -72,9 +72,9 @@
         <ng-container matColumnDef="action">
           <th mat-header-cell *matHeaderCellDef>Disconnect / Reconnect</th>
           <td mat-cell *matCellDef="let c">
-            <mat-radio-group [value]="c.connectionStatus">
-              <mat-radio-button value="DISCONNECTED" (click)="c.connectionStatus === 'CONNECTED' && toggleConnection(c)">Disconnect</mat-radio-button>
-              <mat-radio-button value="CONNECTED" (click)="c.connectionStatus === 'DISCONNECTED' && toggleConnection(c)">Reconnect</mat-radio-button>
+            <mat-radio-group [value]="c.connectionStatus" (change)="onConnectionStatusChange($event, c)">
+              <mat-radio-button value="DISCONNECTED">Disconnect</mat-radio-button>
+              <mat-radio-button value="CONNECTED">Reconnect</mat-radio-button>
             </mat-radio-group>
           </td>
         </ng-container>

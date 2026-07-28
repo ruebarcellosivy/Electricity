@@ -70,9 +70,16 @@ public class ConsumerServiceImpl implements ConsumerService {
         Consumer consumer = consumerRepository.findByConsumerNumber(consumerNumber)
                 .orElseThrow(() -> new ResourceNotFoundException("Consumer not found with number: " + consumerNumber));
 
-        consumer.setConnectionStatus(request.getAction() == ConnectionStatusUpdateRequest.Action.DISCONNECT
-                ? ConnectionStatus.DISCONNECTED
-                : ConnectionStatus.CONNECTED);
+        if (request.getAction() == ConnectionStatusUpdateRequest.Action.DISCONNECT) {
+            consumer.setConnectionStatus(ConnectionStatus.DISCONNECTED);
+        } else {
+            consumer.setConnectionStatus(ConnectionStatus.CONNECTED);
+            Customer customer = consumer.getCustomer();
+            if (customer.getStatus() == com.electricity.billing.entity.enums.CustomerStatus.INACTIVE) {
+                customer.setStatus(com.electricity.billing.entity.enums.CustomerStatus.ACTIVE);
+                customer.getUser().setEnabled(true);
+            }
+        }
 
         return toResponse(consumerRepository.save(consumer));
     }
