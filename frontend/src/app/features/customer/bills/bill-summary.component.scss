@@ -1,0 +1,39 @@
+.table-scroll {
+  overflow-x: auto;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.total-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 0;
+  font-size: 1.1rem;
+}
+
+.payment-method {
+  margin: 16px 0;
+
+  p {
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+
+  mat-radio-button {
+    margin-right: 16px;
+  }
+}
+
+.actions-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.error-block {
+  text-align: center;
+  padding: 24px;
+  color: gray;
+}

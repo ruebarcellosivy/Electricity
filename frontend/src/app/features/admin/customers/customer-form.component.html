@@ -1,0 +1,112 @@
+@if (createdCustomer(); as customer) {
+  <mat-card class="form-card">
+    <mat-card-content class="success-panel">
+      <mat-icon class="success-icon">check_circle</mat-icon>
+      <h2>Customer Added Successfully</h2>
+      <div class="summary-row"><span>Customer ID</span><strong>{{ customer.customerCode }}</strong></div>
+      <div class="summary-row"><span>Name</span><strong>{{ customer.fullName }}</strong></div>
+      <div class="summary-row"><span>Email</span><strong>{{ customer.email }}</strong></div>
+      <p class="hint-text">Customer added successfully. Please add one or more Consumer Nos to complete the setup.</p>
+      <div class="actions-row">
+        <button mat-flat-button color="primary" (click)="goToAddConsumer()">Add Consumer Number</button>
+        <button mat-stroked-button routerLink="/admin/customers">Back to Customer List</button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+} @else {
+  <mat-card class="form-card">
+    <mat-card-header>
+      <mat-card-title>{{ isEditMode() ? 'Update Customer' : 'Add New Customer' }}</mat-card-title>
+      <mat-card-subtitle>
+        @if (isEditMode()) {
+          Update customer contact details
+        } @else {
+          A default password will be generated and the customer will be asked to change it on first login
+        }
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      @if (isEditMode() && existingCustomer(); as existing) {
+        <div class="readonly-row">
+          <div><span>Customer ID</span><strong>{{ existing.customerCode }}</strong></div>
+          <div><span>Consumer Number(s)</span><strong>{{ existing.consumerNumbers.join(', ') || '-' }}</strong></div>
+        </div>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="submit()" class="customer-form">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Full Name</mat-label>
+          <input matInput formControlName="fullName" maxlength="50" />
+          @if (form.controls.fullName.touched && form.controls.fullName.hasError('required')) {
+            <mat-error>Full name cannot be empty.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Address</mat-label>
+          <textarea matInput formControlName="address" rows="2" maxlength="200"></textarea>
+          @if (form.controls.address.touched && form.controls.address.hasError('required')) {
+            <mat-error>Address is required.</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="two-col">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="email" />
+            @if (form.controls.email.touched && form.controls.email.hasError('email')) {
+              <mat-error>Please enter a valid email address.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Mobile Number</mat-label>
+            <input matInput formControlName="mobileNumber" maxlength="10" />
+            @if (form.controls.mobileNumber.touched && form.controls.mobileNumber.hasError('mobileNumber')) {
+              <mat-error>Invalid phone number.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <div class="two-col">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Customer Type</mat-label>
+            <mat-select formControlName="customerType">
+              @for (type of customerTypes; track type) {
+                <mat-option [value]="type">{{ type }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          @if (!isEditMode()) {
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Electrical Section</mat-label>
+              <mat-select formControlName="electricalSection">
+                @for (section of electricalSections; track section) {
+                  <mat-option [value]="section">{{ section }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          }
+        </div>
+
+        @if (!isEditMode()) {
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>User ID</mat-label>
+            <input matInput formControlName="userId" placeholder="5-20 characters" />
+            @if (form.controls.userId.touched && form.controls.userId.hasError('required')) {
+              <mat-error>User ID is required.</mat-error>
+            }
+          </mat-form-field>
+        }
+
+        <div class="actions-row">
+          <button mat-stroked-button type="button" routerLink="/admin/customers">Cancel</button>
+          <button mat-flat-button color="primary" type="submit" [disabled]="submitting()">
+            {{ submitting() ? 'Saving...' : (isEditMode() ? 'Update' : 'Save') }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+}

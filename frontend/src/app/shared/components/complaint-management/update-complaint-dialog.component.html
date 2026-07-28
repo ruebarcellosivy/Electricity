@@ -1,0 +1,36 @@
+<h2 mat-dialog-title>Update Complaint - {{ data.complaint.complaintNumber }}</h2>
+<mat-dialog-content>
+  <p class="complaint-desc">{{ data.complaint.description }}</p>
+  <form [formGroup]="form" class="update-form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        @for (status of statuses; track status) {
+          <mat-option [value]="status">{{ status.replace('_', ' ') }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    @if (data.allowAssign) {
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Assign to SME (User ID)</mat-label>
+        <input matInput formControlName="assignedTo" placeholder="Optional" />
+      </mat-form-field>
+    }
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Remark / Notes</mat-label>
+      <textarea matInput formControlName="remark" rows="4" maxlength="1000"
+                 placeholder="Add notes about this status change"></textarea>
+      @if (form.controls.remark.touched && form.controls.remark.hasError('required')) {
+        <mat-error>Please add a note describing this status change.</mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancel()">Cancel</button>
+  <button mat-flat-button color="primary" [disabled]="submitting()" (click)="submit()">
+    {{ submitting() ? 'Updating...' : 'Update' }}
+  </button>
+</mat-dialog-actions>

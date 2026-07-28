@@ -1,0 +1,15 @@
+.full-width {
+  width: 100%;
+}
+
+.update-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 380px;
+}
+
+.complaint-desc {
+  color: #555;
+  margin-bottom: 12px;
+}

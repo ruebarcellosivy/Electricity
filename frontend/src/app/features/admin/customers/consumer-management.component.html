@@ -1,0 +1,98 @@
+<mat-card class="add-consumer-card">
+  <mat-card-header>
+    <mat-card-title>Add Consumer Number</mat-card-title>
+    <mat-card-subtitle>Link a new consumer number (connection) to a customer</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    @if (prefillCustomerCode()) {
+      <p class="hint-text">Adding a consumer number for Customer ID: <strong>{{ prefillCustomerCode() }}</strong></p>
+    }
+    <form [formGroup]="form" (ngSubmit)="submit()" class="inline-form">
+      <mat-form-field appearance="outline">
+        <mat-label>Customer ID</mat-label>
+        <input matInput type="number" formControlName="customerId" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Consumer Number</mat-label>
+        <input matInput formControlName="consumerNumber" maxlength="13" placeholder="13-digit consumer number" />
+        @if (form.controls.consumerNumber.touched && form.controls.consumerNumber.hasError('consumerNumber')) {
+          <mat-error>Please enter a valid Consumer Number.</mat-error>
+        }
+      </mat-form-field>
+      <button mat-flat-button color="primary" type="submit" [disabled]="submitting()">Add</button>
+    </form>
+  </mat-card-content>
+</mat-card>
+
+<mat-card class="list-card">
+  <mat-card-header>
+    <mat-card-title>Consumers</mat-card-title>
+    <mat-card-subtitle>Filter, paginate and manage connection status</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="filter-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Electrical Section</mat-label>
+        <mat-select [ngModel]="sectionFilter()" (ngModelChange)="sectionFilter.set($event); onFilterChange()">
+          <mat-option value="">All</mat-option>
+          @for (section of electricalSections; track section) {
+            <mat-option [value]="section">{{ section }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Customer Type</mat-label>
+        <mat-select [ngModel]="typeFilter()" (ngModelChange)="typeFilter.set($event); onFilterChange()">
+          <mat-option value="">All</mat-option>
+          @for (type of customerTypes; track type) {
+            <mat-option [value]="type">{{ type }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="table-scroll">
+      <table mat-table [dataSource]="consumers()" class="mat-elevation-z1 full-width">
+        <ng-container matColumnDef="consumerNumber">
+          <th mat-header-cell *matHeaderCellDef>Consumer Number</th>
+          <td mat-cell *matCellDef="let c">{{ c.consumerNumber }}</td>
+        </ng-container>
+        <ng-container matColumnDef="customerCode">
+          <th mat-header-cell *matHeaderCellDef>Customer ID</th>
+          <td mat-cell *matCellDef="let c">{{ c.customerCode }}</td>
+        </ng-container>
+        <ng-container matColumnDef="customerName">
+          <th mat-header-cell *matHeaderCellDef>Customer Name</th>
+          <td mat-cell *matCellDef="let c">{{ c.customerName }}</td>
+        </ng-container>
+        <ng-container matColumnDef="customerType">
+          <th mat-header-cell *matHeaderCellDef>Type</th>
+          <td mat-cell *matCellDef="let c">{{ c.customerType }}</td>
+        </ng-container>
+        <ng-container matColumnDef="connectionStatus">
+          <th mat-header-cell *matHeaderCellDef>Connection Status</th>
+          <td mat-cell *matCellDef="let c">
+            <mat-chip [color]="c.connectionStatus === 'CONNECTED' ? 'primary' : 'warn'" selected>{{ c.connectionStatus }}</mat-chip>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>Disconnect / Reconnect</th>
+          <td mat-cell *matCellDef="let c">
+            <mat-radio-group [value]="c.connectionStatus">
+              <mat-radio-button value="DISCONNECTED" (click)="c.connectionStatus === 'CONNECTED' && toggleConnection(c)">Disconnect</mat-radio-button>
+              <mat-radio-button value="CONNECTED" (click)="c.connectionStatus === 'DISCONNECTED' && toggleConnection(c)">Reconnect</mat-radio-button>
+            </mat-radio-group>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+      </table>
+      @if (consumers().length === 0) {
+        <p class="empty-message">No consumers found.</p>
+      }
+    </div>
+
+    <mat-paginator [length]="totalElements()" [pageSize]="pageSize()" [pageIndex]="pageIndex()"
+                    [pageSizeOptions]="[10, 25, 50]" (page)="onPageChange($event)"></mat-paginator>
+  </mat-card-content>
+</mat-card>

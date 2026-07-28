@@ -1,0 +1,110 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>View / Pay Bills</mat-card-title>
+    <mat-card-subtitle>Select one or more bills below and proceed to payment</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="filter-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Filter by Payment Status</mat-label>
+        <mat-select [value]="statusFilter()" (selectionChange)="onFilterChange($event.value)">
+          <mat-option value="">All</mat-option>
+          <mat-option value="UNPAID">Unpaid</mat-option>
+          <mat-option value="PAID">Paid</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="table-scroll">
+      <table mat-table [dataSource]="bills()" class="mat-elevation-z1 full-width">
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (change)="toggleAll()"></mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let bill">
+            <mat-checkbox [disabled]="bill.status === 'PAID'"
+                           [checked]="selection.isSelected(bill.id)"
+                           (change)="selection.toggle(bill.id)"></mat-checkbox>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="consumerNumber">
+          <th mat-header-cell *matHeaderCellDef>Consumer No</th>
+          <td mat-cell *matCellDef="let bill">{{ bill.consumerNumber }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="billNumber">
+          <th mat-header-cell *matHeaderCellDef>Bill Number</th>
+          <td mat-cell *matCellDef="let bill">{{ bill.billNumber }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Payment Status</th>
+          <td mat-cell *matCellDef="let bill">
+            <mat-chip [color]="bill.status === 'PAID' ? 'primary' : 'warn'" selected>{{ bill.status }}</mat-chip>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="connectionType">
+          <th mat-header-cell *matHeaderCellDef>Connection Type</th>
+          <td mat-cell *matCellDef="let bill">{{ bill.connectionType }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="connectionStatus">
+          <th mat-header-cell *matHeaderCellDef>Connection Status</th>
+          <td mat-cell *matCellDef="let bill">{{ bill.connectionStatus }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="mobileNumber">
+          <th mat-header-cell *matHeaderCellDef>Mobile Number</th>
+          <td mat-cell *matCellDef="let bill">{{ bill.mobileNumber }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="billingPeriod">
+          <th mat-header-cell *matHeaderCellDef>Bill Period</th>
+          <td mat-cell *matCellDef="let bill">{{ bill.billingPeriod }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="billDate">
+          <th mat-header-cell *matHeaderCellDef>Bill Date</th>
+          <td mat-cell *matCellDef="let bill">{{ bill.billDate | date:'mediumDate' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="dueDate">
+          <th mat-header-cell *matHeaderCellDef>Due Date</th>
+          <td mat-cell *matCellDef="let bill">{{ bill.dueDate | date:'mediumDate' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="disconnectionDate">
+          <th mat-header-cell *matHeaderCellDef>Disconnection Date</th>
+          <td mat-cell *matCellDef="let bill">{{ bill.disconnectionDate ? (bill.disconnectionDate | date:'mediumDate') : '-' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="payableAmount">
+          <th mat-header-cell *matHeaderCellDef>Payable Amount</th>
+          <td mat-cell *matCellDef="let bill">₹{{ bill.payableAmount | number:'1.2-2' }}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+      </table>
+
+      @if (bills().length === 0) {
+        <p class="empty-message">No bills found for the selected filter.</p>
+      }
+    </div>
+
+    <mat-paginator [length]="totalElements()" [pageSize]="pageSize()" [pageIndex]="pageIndex()"
+                    [pageSizeOptions]="[5, 10, 25]" (page)="onPageChange($event)"></mat-paginator>
+
+    <div class="total-row">
+      <span>Total Amount Payable</span>
+      <strong>₹{{ totalPayable() | number:'1.2-2' }}</strong>
+    </div>
+
+    <button mat-flat-button color="primary" [disabled]="selection.selected.length === 0" (click)="proceedToPay()">
+      Proceed to Pay
+    </button>
+  </mat-card-content>
+</mat-card>

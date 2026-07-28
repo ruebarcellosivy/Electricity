@@ -1,0 +1,95 @@
+@if (results(); as paymentResults) {
+  <mat-card class="pay-card">
+    <mat-card-content class="success-panel">
+      <mat-icon class="success-icon">check_circle</mat-icon>
+      <h2>Payment Successful</h2>
+      @for (result of paymentResults; track result.paymentId) {
+        <div class="result-block">
+          <div class="summary-row"><span>Payment ID</span><strong>{{ result.paymentId }}</strong></div>
+          <div class="summary-row"><span>Transaction ID</span><strong>{{ result.transactionId }}</strong></div>
+          <div class="summary-row"><span>Receipt Number</span><strong>{{ result.receiptNumber }}</strong></div>
+          <div class="summary-row"><span>Transaction Date</span><strong>{{ result.transactionDate | date:'medium' }}</strong></div>
+          <div class="summary-row"><span>Transaction Type</span><strong>{{ result.transactionType }}</strong></div>
+          <div class="summary-row"><span>Bill Number</span><strong>{{ result.billNumber }}</strong></div>
+          <div class="summary-row"><span>Amount</span><strong>₹{{ result.transactionAmount | number:'1.2-2' }}</strong></div>
+          <div class="summary-row"><span>Status</span><strong>{{ result.transactionStatus }}</strong></div>
+          <div class="result-actions">
+            <button mat-stroked-button (click)="downloadReceipt(result.paymentId)">
+              <mat-icon>download</mat-icon> Receipt
+            </button>
+            <button mat-stroked-button (click)="downloadInvoice(result.transactionId)">
+              <mat-icon>download</mat-icon> Invoice
+            </button>
+            <button mat-stroked-button (click)="viewInvoice(result.transactionId)">
+              <mat-icon>visibility</mat-icon> View Invoice
+            </button>
+          </div>
+        </div>
+      }
+      <button mat-flat-button color="primary" routerLink="/customer/dashboard">Back to Dashboard</button>
+      <button mat-stroked-button routerLink="/customer/bills/history">View Bill History</button>
+    </mat-card-content>
+  </mat-card>
+} @else {
+  <mat-card class="pay-card">
+    <mat-card-header>
+      <mat-card-title>Pay Bill</mat-card-title>
+      <mat-card-subtitle>Enter your card details to complete the payment</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="amount-due">Total Amount Due: <strong>₹{{ totalAmount() | number:'1.2-2' }}</strong></div>
+
+      <form [formGroup]="form" (ngSubmit)="submit()" class="pay-form">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Cardholder Name</mat-label>
+          <input matInput formControlName="cardHolderName" />
+          @if (form.controls.cardHolderName.touched && form.controls.cardHolderName.hasError('required')) {
+            <mat-error>Cardholder name is required.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Card Number</mat-label>
+          <input matInput formControlName="cardNumber" maxlength="16" placeholder="16-digit card number" />
+          @if (form.controls.cardNumber.touched && form.controls.cardNumber.hasError('required')) {
+            <mat-error>Card number is required.</mat-error>
+          }
+          @if (form.controls.cardNumber.touched && form.controls.cardNumber.hasError('cardNumber')) {
+            <mat-error>Card number must be 16 digits.</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="two-col">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Expiry Date (MM/YY)</mat-label>
+            <input matInput formControlName="expiryDate" placeholder="MM/YY" maxlength="5" />
+            @if (form.controls.expiryDate.touched && form.controls.expiryDate.hasError('required')) {
+              <mat-error>Expiry date is required.</mat-error>
+            }
+            @if (form.controls.expiryDate.touched && form.controls.expiryDate.hasError('expiryFormat')) {
+              <mat-error>Use MM/YY format.</mat-error>
+            }
+            @if (form.controls.expiryDate.touched && form.controls.expiryDate.hasError('expired')) {
+              <mat-error>This card has expired.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>CVV</mat-label>
+            <input matInput formControlName="cvv" maxlength="4" type="password" />
+            @if (form.controls.cvv.touched && form.controls.cvv.hasError('required')) {
+              <mat-error>CVV is required.</mat-error>
+            }
+            @if (form.controls.cvv.touched && form.controls.cvv.hasError('cvv')) {
+              <mat-error>CVV must be 3 or 4 digits.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <button mat-flat-button color="primary" class="full-width submit-btn" type="submit" [disabled]="submitting()">
+          {{ submitting() ? 'Processing...' : 'Pay Now' }}
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+}

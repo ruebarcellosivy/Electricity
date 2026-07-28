@@ -1,0 +1,40 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Complaint History</mat-card-title>
+    <mat-card-subtitle>All complaints you have registered</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    @if (complaints().length === 0) {
+      <p class="empty-message">You have not registered any complaints yet.</p>
+    }
+    <mat-accordion>
+      @for (complaint of complaints(); track complaint.id) {
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>{{ complaint.complaintNumber }} - {{ complaint.complaintType.replace('_', ' ') }}</mat-panel-title>
+            <mat-panel-description>
+              {{ complaint.createdAt | date:'mediumDate' }}
+              <mat-chip [color]="statusColor(complaint.status)" selected>{{ complaint.status }}</mat-chip>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <div class="summary-row"><span>Category</span><strong>{{ complaint.category }}</strong></div>
+          <div class="summary-row"><span>Description</span><strong>{{ complaint.description }}</strong></div>
+          <div class="summary-row"><span>Consumer Number</span><strong>{{ complaint.consumerNumber }}</strong></div>
+          <div class="summary-row"><span>Contact</span><strong>{{ complaint.contactDetails }} ({{ complaint.preferredContactMethod }})</strong></div>
+          @if (complaint.remarks.length > 0) {
+            <h4>Notes</h4>
+            @for (remark of complaint.remarks; track remark.createdAt) {
+              <div class="remark-item">
+                <div class="remark-meta">{{ remark.updatedBy }} - {{ remark.createdAt | date:'medium' }} - {{ remark.statusAtTime }}</div>
+                <div>{{ remark.remark }}</div>
+              </div>
+            }
+          }
+        </mat-expansion-panel>
+      }
+    </mat-accordion>
+
+    <mat-paginator [length]="totalElements()" [pageSize]="pageSize()" [pageIndex]="pageIndex()"
+                    [pageSizeOptions]="[5, 10, 25]" (page)="onPageChange($event)"></mat-paginator>
+  </mat-card-content>
+</mat-card>

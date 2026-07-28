@@ -1,0 +1,103 @@
+@if (result(); as complaint) {
+  <mat-card class="complaint-card">
+    <mat-card-content class="success-panel">
+      <mat-icon class="success-icon">check_circle</mat-icon>
+      <h2>Complaint Registered Successfully</h2>
+      <div class="summary-row"><span>Complaint ID</span><strong>{{ complaint.complaintNumber }}</strong></div>
+      <div class="summary-row"><span>Type</span><strong>{{ complaint.complaintType }}</strong></div>
+      <div class="summary-row"><span>Category</span><strong>{{ complaint.category }}</strong></div>
+      <div class="summary-row"><span>Estimated Resolution</span>
+        <strong>{{ complaint.resolutionDueAt | date:'medium' }}</strong>
+      </div>
+      <div class="summary-row"><span>Description</span><strong>{{ complaint.description }}</strong></div>
+      <div class="actions-row">
+        <button mat-flat-button color="primary" routerLink="/customer/dashboard">Back to Dashboard</button>
+        <button mat-stroked-button routerLink="/customer/complaints/status">View Complaint Status</button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+} @else {
+  <mat-card class="complaint-card">
+    <mat-card-header>
+      <mat-card-title>Register a Complaint</mat-card-title>
+      <mat-card-subtitle>Let us know about billing issues, outages or meter problems</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="submit()" class="complaint-form">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Consumer Number</mat-label>
+          <mat-select formControlName="consumerNumber">
+            @for (consumer of consumers(); track consumer.consumerNumber) {
+              <mat-option [value]="consumer.consumerNumber">{{ consumer.consumerNumber }}</mat-option>
+            }
+          </mat-select>
+          @if (form.controls.consumerNumber.touched && form.controls.consumerNumber.hasError('required')) {
+            <mat-error>Please select a consumer number.</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="two-col">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Complaint Type</mat-label>
+            <mat-select formControlName="complaintType">
+              @for (type of complaintTypes; track type) {
+                <mat-option [value]="type">{{ type.replace('_', ' ') }}</mat-option>
+              }
+            </mat-select>
+            @if (form.controls.complaintType.touched && form.controls.complaintType.hasError('required')) {
+              <mat-error>Complaint type is required.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Category</mat-label>
+            <mat-select formControlName="category">
+              @for (category of categoryOptions(); track category) {
+                <mat-option [value]="category">{{ category }}</mat-option>
+              }
+            </mat-select>
+            @if (form.controls.category.touched && form.controls.category.hasError('required')) {
+              <mat-error>Category is required.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description" rows="4" maxlength="1000"
+                     placeholder="Describe the issue in detail"></textarea>
+          @if (form.controls.description.touched && form.controls.description.hasError('required')) {
+            <mat-error>Description is required.</mat-error>
+          }
+          @if (form.controls.description.touched && form.controls.description.hasError('maxlength')) {
+            <mat-error>Description cannot exceed 1000 characters.</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="contact-method">
+          <p>Preferred Contact Method</p>
+          <mat-radio-group formControlName="preferredContactMethod">
+            @for (method of contactMethods; track method) {
+              <mat-radio-button [value]="method">{{ method }}</mat-radio-button>
+            }
+          </mat-radio-group>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Contact Details</mat-label>
+          <input matInput formControlName="contactDetails" />
+          @if (form.controls.contactDetails.touched && form.controls.contactDetails.hasError('required')) {
+            <mat-error>Contact details are required.</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="actions-row">
+          <button mat-stroked-button type="button" (click)="reset()">Reset</button>
+          <button mat-flat-button color="primary" type="submit" [disabled]="submitting()">
+            {{ submitting() ? 'Submitting...' : 'Submit Complaint' }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+}

@@ -1,0 +1,48 @@
+.bill-card {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.bill-form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+
+  @media (max-width: 560px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+.actions-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 12px;
+}
+
+.success-panel {
+  text-align: center;
+  padding: 16px 8px;
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+  }
+
+  .actions-row {
+    justify-content: center;
+    gap: 12px;
+  }
+}

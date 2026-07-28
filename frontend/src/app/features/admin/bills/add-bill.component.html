@@ -1,0 +1,110 @@
+@if (created(); as bill) {
+  <mat-card class="bill-card">
+    <mat-card-content class="success-panel">
+      <h2>Bill Generated Successfully</h2>
+      <div class="summary-row"><span>Bill Number</span><strong>{{ bill.billNumber }}</strong></div>
+      <div class="summary-row"><span>Consumer Number</span><strong>{{ bill.consumerNumber }}</strong></div>
+      <div class="summary-row"><span>Billing Period</span><strong>{{ bill.billingPeriod }}</strong></div>
+      <div class="summary-row"><span>Bill Amount</span><strong>₹{{ bill.billAmount | number:'1.2-2' }}</strong></div>
+      <div class="summary-row"><span>Due Date</span><strong>{{ bill.dueDate | date:'mediumDate' }}</strong></div>
+      <div class="actions-row">
+        <button mat-flat-button color="primary" (click)="addAnother()">Add Another Bill</button>
+        <button mat-stroked-button routerLink="/admin/bills">View Bills</button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+} @else {
+  <mat-card class="bill-card">
+    <mat-card-header>
+      <mat-card-title>Add Bill</mat-card-title>
+      <mat-card-subtitle>Generate a new electricity bill for a consumer</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="submit()" class="bill-form">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Consumer Number</mat-label>
+          <input matInput formControlName="consumerNumber" maxlength="13" placeholder="13-digit consumer number" />
+          @if (form.controls.consumerNumber.touched && form.controls.consumerNumber.hasError('consumerNumber')) {
+            <mat-error>Please enter a valid Consumer Number.</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Billing Period</mat-label>
+          <input matInput formControlName="billingPeriod" placeholder="e.g. JUL-2026" />
+          @if (form.controls.billingPeriod.touched && form.controls.billingPeriod.hasError('required')) {
+            <mat-error>Billing period is required.</mat-error>
+          }
+        </mat-form-field>
+
+        <div class="two-col">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Bill Date</mat-label>
+            <input matInput [matDatepicker]="billDatePicker" formControlName="billDate" />
+            <mat-datepicker-toggle matSuffix [for]="billDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #billDatePicker></mat-datepicker>
+            @if (form.controls.billDate.touched && form.controls.billDate.hasError('required')) {
+              <mat-error>Bill date is required.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Due Date</mat-label>
+            <input matInput [matDatepicker]="dueDatePicker" formControlName="dueDate" />
+            <mat-datepicker-toggle matSuffix [for]="dueDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #dueDatePicker></mat-datepicker>
+            @if (form.controls.dueDate.touched && form.controls.dueDate.hasError('required')) {
+              <mat-error>Due date is required.</mat-error>
+            }
+            @if (form.controls.dueDate.touched && form.controls.dueDate.hasError('dateRange')) {
+              <mat-error>Due Date cannot be before Bill Date.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Disconnection Date (optional)</mat-label>
+          <input matInput [matDatepicker]="disconnectionPicker" formControlName="disconnectionDate" />
+          <mat-datepicker-toggle matSuffix [for]="disconnectionPicker"></mat-datepicker-toggle>
+          <mat-datepicker #disconnectionPicker></mat-datepicker>
+        </mat-form-field>
+
+        <div class="two-col">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Bill Amount</mat-label>
+            <input matInput type="number" formControlName="billAmount" min="0" />
+            @if (form.controls.billAmount.touched && form.controls.billAmount.hasError('required')) {
+              <mat-error>Bill amount is required.</mat-error>
+            }
+            @if (form.controls.billAmount.touched && form.controls.billAmount.hasError('min')) {
+              <mat-error>Bill amount cannot be negative.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Late Fee</mat-label>
+            <input matInput type="number" formControlName="lateFee" min="0" />
+            @if (form.controls.lateFee.touched && form.controls.lateFee.hasError('min')) {
+              <mat-error>Late fee cannot be negative.</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="status">
+            <mat-option value="UNPAID">Unpaid</mat-option>
+            <mat-option value="PAID">Paid</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="actions-row">
+          <button mat-stroked-button type="button" routerLink="/admin/customers">Cancel</button>
+          <button mat-flat-button color="primary" type="submit" [disabled]="submitting()">
+            {{ submitting() ? 'Saving...' : 'Save' }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+}

@@ -1,0 +1,28 @@
+@if (invoice(); as inv) {
+  <mat-card class="invoice-card">
+    <mat-card-header>
+      <mat-card-title>Invoice</mat-card-title>
+      <mat-card-subtitle>{{ inv.invoiceNumber }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="summary-row"><span>Payment ID</span><strong>{{ inv.paymentId }}</strong></div>
+      <div class="summary-row"><span>Transaction ID</span><strong>{{ inv.transactionId }}</strong></div>
+      <div class="summary-row"><span>Receipt Number</span><strong>{{ inv.receiptNumber }}</strong></div>
+      <div class="summary-row"><span>Consumer Number</span><strong>{{ inv.consumerNumber }}</strong></div>
+      <div class="summary-row"><span>Customer Name</span><strong>{{ inv.customerName }}</strong></div>
+      <div class="summary-row"><span>Address</span><strong>{{ inv.address }}</strong></div>
+      <div class="summary-row"><span>Transaction Date</span><strong>{{ inv.transactionDate | date:'medium' }}</strong></div>
+      <div class="summary-row"><span>Transaction Type</span><strong>{{ inv.transactionType }}</strong></div>
+      <div class="summary-row"><span>Bill Number</span><strong>{{ inv.billNumber }}</strong></div>
+      <div class="summary-row"><span>Amount</span><strong>₹{{ inv.transactionAmount | number:'1.2-2' }}</strong></div>
+      <div class="summary-row"><span>Status</span><strong>{{ inv.transactionStatus }}</strong></div>
+
+      <div class="actions-row">
+        <button mat-flat-button color="primary" (click)="download()">
+          <mat-icon>download</mat-icon> Download Invoice
+        </button>
+        <button mat-stroked-button routerLink="/customer/dashboard">Back to Dashboard</button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+}

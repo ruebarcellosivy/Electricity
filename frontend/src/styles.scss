@@ -1,0 +1,15 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Self-hosted fonts: no reliance on Google Fonts CDN, so the app works fully offline. */
+@import "@fontsource/roboto/300.css";
+@import "@fontsource/roboto/400.css";
+@import "@fontsource/roboto/500.css";
+@import "material-icons/iconfont/filled.css";
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.snackbar-error {
+  --mdc-snackbar-container-color: #c62828;
+  --mdc-snackbar-supporting-text-color: #fff;
+}

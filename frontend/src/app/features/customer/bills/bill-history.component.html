@@ -1,0 +1,92 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Bill History</mat-card-title>
+    <mat-card-subtitle>View your electricity usage and payment history</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="filter-row">
+      <mat-form-field appearance="outline">
+        <mat-label>From Date</mat-label>
+        <input matInput [matDatepicker]="fromPicker" [ngModel]="fromDate()" (ngModelChange)="fromDate.set($event); onFilterChange()" />
+        <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+        <mat-datepicker #fromPicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>To Date</mat-label>
+        <input matInput [matDatepicker]="toPicker" [ngModel]="toDate()" (ngModelChange)="toDate.set($event); onFilterChange()" />
+        <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+        <mat-datepicker #toPicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Payment Status</mat-label>
+        <mat-select [ngModel]="statusFilter()" (ngModelChange)="statusFilter.set($event); onFilterChange()">
+          <mat-option value="">All</mat-option>
+          <mat-option value="UNPAID">Unpaid</mat-option>
+          <mat-option value="PAID">Paid</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Sort By</mat-label>
+        <mat-select [ngModel]="sortBy()" (ngModelChange)="sortBy.set($event); onFilterChange()">
+          <mat-option value="billDate">Bill Date</mat-option>
+          <mat-option value="dueDate">Due Date</mat-option>
+          <mat-option value="billAmount">Bill Amount</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-stroked-button (click)="downloadHistory()">
+        <mat-icon>download</mat-icon> Export PDF
+      </button>
+    </div>
+
+    <div class="table-scroll">
+      <table mat-table [dataSource]="bills()" class="mat-elevation-z1 full-width">
+        <ng-container matColumnDef="billDate">
+          <th mat-header-cell *matHeaderCellDef>Bill Date</th>
+          <td mat-cell *matCellDef="let bill">{{ bill.billDate | date:'mediumDate' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="billingPeriod">
+          <th mat-header-cell *matHeaderCellDef>Billing Period</th>
+          <td mat-cell *matCellDef="let bill">{{ bill.billingPeriod }}</td>
+        </ng-container>
+        <ng-container matColumnDef="dueDate">
+          <th mat-header-cell *matHeaderCellDef>Due Date</th>
+          <td mat-cell *matCellDef="let bill">{{ bill.dueDate | date:'mediumDate' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="billAmount">
+          <th mat-header-cell *matHeaderCellDef>Bill Amount</th>
+          <td mat-cell *matCellDef="let bill">₹{{ bill.payableAmount | number:'1.2-2' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Payment Status</th>
+          <td mat-cell *matCellDef="let bill">
+            <mat-chip [color]="bill.status === 'PAID' ? 'primary' : 'warn'" selected>{{ bill.status }}</mat-chip>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="paymentDate">
+          <th mat-header-cell *matHeaderCellDef>Payment Date</th>
+          <td mat-cell *matCellDef="let bill">{{ bill.paymentDate ? (bill.paymentDate | date:'mediumDate') : '-' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Details</th>
+          <td mat-cell *matCellDef="let bill">
+            <button mat-icon-button (click)="viewBill(bill)" aria-label="View bill">
+              <mat-icon>visibility</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+      </table>
+      @if (bills().length === 0) {
+        <p class="empty-message">No bills found for the selected filters.</p>
+      }
+    </div>
+
+    <mat-paginator [length]="totalElements()" [pageSize]="pageSize()" [pageIndex]="pageIndex()"
+                    [pageSizeOptions]="[10, 25, 50]" (page)="onPageChange($event)"></mat-paginator>
+  </mat-card-content>
+</mat-card>

@@ -1,0 +1,35 @@
+<mat-card class="status-card">
+  <mat-card-header>
+    <mat-card-title>Complaint Status</mat-card-title>
+    <mat-card-subtitle>Track the status of a complaint using its Complaint ID</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="search()" class="search-form">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Complaint Number</mat-label>
+        <input matInput formControlName="complaintNumber" placeholder="e.g. CMP20260001234" />
+        @if (form.controls.complaintNumber.touched && form.controls.complaintNumber.hasError('required')) {
+          <mat-error>Please enter a complaint number.</mat-error>
+        }
+      </mat-form-field>
+      <button mat-flat-button color="primary" type="submit">Search</button>
+    </form>
+
+    @if (searched()) {
+      @if (complaint(); as c) {
+        <div class="detail-block">
+          <div class="summary-row"><span>Complaint ID</span><strong>{{ c.complaintNumber }}</strong></div>
+          <div class="summary-row"><span>Submitted On</span><strong>{{ c.createdAt | date:'medium' }}</strong></div>
+          <div class="summary-row"><span>Type</span><strong>{{ c.complaintType }}</strong></div>
+          <div class="summary-row"><span>Category</span><strong>{{ c.category }}</strong></div>
+          <div class="summary-row"><span>Status</span>
+            <mat-chip [color]="statusColor(c.status)" selected>{{ c.status }}</mat-chip>
+          </div>
+          <div class="summary-row"><span>Last Updated</span><strong>{{ c.updatedAt | date:'medium' }}</strong></div>
+        </div>
+      } @else {
+        <p class="empty-message">No complaint found with that ID.</p>
+      }
+    }
+  </mat-card-content>
+</mat-card>

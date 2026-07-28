@@ -1,0 +1,25 @@
+.filter-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 12px;
+
+  mat-form-field {
+    width: 180px;
+  }
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.empty-message {
+  text-align: center;
+  color: gray;
+  padding: 24px;
+}

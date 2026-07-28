@@ -1,0 +1,67 @@
+@if (summary(); as data) {
+  <div class="welcome-header">
+    <h1>Welcome, {{ data.profile.fullName }}</h1>
+    <p>Here's an overview of your electricity account.</p>
+  </div>
+
+  <div class="grid-row">
+    <mat-card class="profile-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>account_circle</mat-icon>
+        <mat-card-title>Account Information</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="info-row"><span>Customer ID</span><strong>{{ data.profile.customerCode }}</strong></div>
+        <div class="info-row"><span>Consumer Number(s)</span>
+          <strong>{{ data.profile.consumerNumbers.join(', ') }}</strong>
+        </div>
+        <div class="info-row"><span>Billing Address</span><strong>{{ data.profile.address }}</strong></div>
+        <div class="info-row"><span>Customer Type</span><strong>{{ data.profile.customerType }}</strong></div>
+        <div class="info-row"><span>Status</span>
+          <mat-chip [color]="data.profile.status === 'ACTIVE' ? 'primary' : 'warn'" selected>
+            {{ data.profile.status }}
+          </mat-chip>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="bill-summary-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>receipt_long</mat-icon>
+        <mat-card-title>Current Bill Summary</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        @if (data.latestBill; as bill) {
+          <div class="info-row"><span>Billing Period</span><strong>{{ bill.billingPeriod }}</strong></div>
+          <div class="info-row"><span>Due Date</span><strong>{{ bill.dueDate | date:'mediumDate' }}</strong></div>
+          <div class="info-row"><span>Amount Due</span><strong>₹{{ bill.payableAmount | number:'1.2-2' }}</strong></div>
+          <div class="info-row"><span>Status</span>
+            <mat-chip [color]="bill.status === 'PAID' ? 'primary' : 'warn'" selected>{{ bill.status }}</mat-chip>
+          </div>
+          @if (bill.status === 'UNPAID') {
+            <button mat-flat-button color="accent" routerLink="/customer/bills">Pay Now</button>
+          }
+        } @else {
+          <p>No bills have been generated yet.</p>
+        }
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat"><span class="stat-value">{{ data.unpaidBillCount }}</span><span>Unpaid Bills</span></div>
+        <div class="stat"><span class="stat-value">{{ data.openComplaintCount }}</span><span>Open Complaints</span></div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <h2 class="section-title">Quick Actions</h2>
+  <div class="feature-grid">
+    @for (feature of features; track feature.path + feature.label) {
+      <a mat-stroked-button [routerLink]="feature.path" class="feature-tile">
+        <mat-icon>{{ feature.icon }}</mat-icon>
+        <span>{{ feature.label }}</span>
+      </a>
+    }
+  </div>
+}

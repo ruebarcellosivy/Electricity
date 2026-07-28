@@ -1,0 +1,12 @@
+target/
+data/*.db
+data/*.db-journal
+!data/.gitkeep
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.vscode/
+*.log
+HELP.md

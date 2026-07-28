@@ -1,0 +1,99 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>{{ title }}</mat-card-title>
+    <mat-card-subtitle>{{ subtitle }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="filter-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Customer ID</mat-label>
+        <input matInput [ngModel]="customerCode()" (ngModelChange)="customerCode.set($event)" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Consumer Number</mat-label>
+        <input matInput [ngModel]="consumerNumber()" (ngModelChange)="consumerNumber.set($event)" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Complaint ID</mat-label>
+        <input matInput [ngModel]="complaintNumber()" (ngModelChange)="complaintNumber.set($event)" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Complaint Type</mat-label>
+        <mat-select [ngModel]="typeFilter()" (ngModelChange)="typeFilter.set($event)">
+          <mat-option value="">All</mat-option>
+          @for (type of complaintTypes; track type) {
+            <mat-option [value]="type">{{ type.replace('_', ' ') }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Status</mat-label>
+        <mat-select [ngModel]="statusFilter()" (ngModelChange)="statusFilter.set($event)">
+          <mat-option value="">All</mat-option>
+          @for (status of complaintStatuses; track status) {
+            <mat-option [value]="status">{{ status.replace('_', ' ') }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <button mat-flat-button color="primary" (click)="onSearch()">
+        <mat-icon>search</mat-icon> Search
+      </button>
+      <span class="spacer"></span>
+      <button mat-stroked-button (click)="export('csv')">
+        <mat-icon>download</mat-icon> CSV
+      </button>
+      <button mat-stroked-button (click)="export('pdf')">
+        <mat-icon>download</mat-icon> PDF
+      </button>
+    </div>
+
+    <div class="table-scroll">
+      <table mat-table [dataSource]="complaints()" class="mat-elevation-z1 full-width">
+        <ng-container matColumnDef="complaintNumber">
+          <th mat-header-cell *matHeaderCellDef>Complaint ID</th>
+          <td mat-cell *matCellDef="let c">{{ c.complaintNumber }}</td>
+        </ng-container>
+        <ng-container matColumnDef="consumerNumber">
+          <th mat-header-cell *matHeaderCellDef>Consumer No</th>
+          <td mat-cell *matCellDef="let c">{{ c.consumerNumber }}</td>
+        </ng-container>
+        <ng-container matColumnDef="customerName">
+          <th mat-header-cell *matHeaderCellDef>Customer</th>
+          <td mat-cell *matCellDef="let c">{{ c.customerName }}</td>
+        </ng-container>
+        <ng-container matColumnDef="complaintType">
+          <th mat-header-cell *matHeaderCellDef>Type</th>
+          <td mat-cell *matCellDef="let c">{{ c.complaintType.replace('_', ' ') }}</td>
+        </ng-container>
+        <ng-container matColumnDef="dateSubmitted">
+          <th mat-header-cell *matHeaderCellDef>Date Submitted</th>
+          <td mat-cell *matCellDef="let c">{{ c.createdAt | date:'mediumDate' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let c">
+            <mat-chip [color]="statusColor(c.status)" selected>{{ c.status }}</mat-chip>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="lastUpdated">
+          <th mat-header-cell *matHeaderCellDef>Last Updated</th>
+          <td mat-cell *matCellDef="let c">{{ c.updatedAt | date:'mediumDate' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let c">
+            <button mat-stroked-button (click)="openUpdateDialog(c)">Update</button>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="columns"></tr>
+        <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+      </table>
+      @if (complaints().length === 0) {
+        <p class="empty-message">No complaints found for the selected filters.</p>
+      }
+    </div>
+
+    <mat-paginator [length]="totalElements()" [pageSize]="pageSize()" [pageIndex]="pageIndex()"
+                    [pageSizeOptions]="[10, 25, 50]" (page)="onPageChange($event)"></mat-paginator>
+  </mat-card-content>
+</mat-card>

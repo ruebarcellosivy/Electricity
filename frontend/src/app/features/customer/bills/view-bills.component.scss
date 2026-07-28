@@ -1,0 +1,30 @@
+.filter-row {
+  margin-bottom: 12px;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.empty-message {
+  text-align: center;
+  color: gray;
+  padding: 24px;
+}
+
+.total-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 0;
+  font-size: 1.1rem;
+}
+
+button[mat-flat-button] {
+  float: right;
+  margin-bottom: 24px;
+}
