@@ -55,7 +55,7 @@
         <div class="two-col">
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Bill Date</mat-label>
-            <input matInput [matDatepicker]="billDatePicker" formControlName="billDate" [max]="maxDate" />
+            <input matInput [matDatepicker]="billDatePicker" formControlName="billDate" [max]="maxDate" readonly />
             <mat-datepicker-toggle matSuffix [for]="billDatePicker"></mat-datepicker-toggle>
             <mat-datepicker #billDatePicker></mat-datepicker>
             @if (form.controls.billDate.touched && form.controls.billDate.hasError('required')) {
@@ -65,7 +65,7 @@
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Due Date</mat-label>
-            <input matInput [matDatepicker]="dueDatePicker" formControlName="dueDate" />
+            <input matInput [matDatepicker]="dueDatePicker" formControlName="dueDate" readonly />
             <mat-datepicker-toggle matSuffix [for]="dueDatePicker"></mat-datepicker-toggle>
             <mat-datepicker #dueDatePicker></mat-datepicker>
             @if (form.controls.dueDate.touched && form.controls.dueDate.hasError('required')) {
@@ -79,7 +79,7 @@
 
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Disconnection Date (optional)</mat-label>
-          <input matInput [matDatepicker]="disconnectionPicker" formControlName="disconnectionDate" />
+          <input matInput [matDatepicker]="disconnectionPicker" formControlName="disconnectionDate" readonly />
           <mat-datepicker-toggle matSuffix [for]="disconnectionPicker"></mat-datepicker-toggle>
           <mat-datepicker #disconnectionPicker></mat-datepicker>
         </mat-form-field>
