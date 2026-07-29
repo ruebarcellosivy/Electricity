@@ -7,7 +7,6 @@ import { ComplaintManagementComponent } from '../../../shared/components/complai
   imports: [ComplaintManagementComponent],
   template: `
     <app-complaint-management
-      [allowAssign]="true"
       title="Complaints"
       subtitle="Search complaints, update their status and assign them to an SME">
     </app-complaint-management>

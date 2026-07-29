@@ -12,7 +12,6 @@ import { Complaint } from '../../../core/models/complaint.model';
 
 export interface UpdateComplaintDialogData {
   complaint: Complaint;
-  allowAssign: boolean;
 }
 
 @Component({
@@ -34,8 +33,7 @@ export class UpdateComplaintDialogComponent {
 
   readonly form = this.fb.nonNullable.group({
     status: [this.data.complaint.status, [Validators.required]],
-    remark: ['', [Validators.required, Validators.maxLength(1000)]],
-    assignedTo: [this.data.complaint.assignedTo || '']
+    remark: ['', [Validators.required, Validators.maxLength(1000)]]
   });
 
   submit(): void {
@@ -47,8 +45,7 @@ export class UpdateComplaintDialogComponent {
     const value = this.form.getRawValue();
     this.complaintService.updateStatus(this.data.complaint.id, {
       status: value.status,
-      remark: value.remark,
-      assignedTo: this.data.allowAssign ? value.assignedTo : undefined
+      remark: value.remark
     }).subscribe({
       next: () => {
         this.submitting.set(false);

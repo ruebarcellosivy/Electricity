@@ -32,8 +32,7 @@ const COLUMNS = ['complaintNumber', 'consumerNumber', 'customerName', 'complaint
   styleUrl: './complaint-management.component.scss'
 })
 export class ComplaintManagementComponent implements OnInit {
-  /** Whether the current role (ADMIN) may assign complaints to an SME user id. */
-  @Input() allowAssign = false;
+  @Input() isSme = false;
   @Input() title = 'Complaints';
   @Input() subtitle = 'Search and manage customer complaints';
 
@@ -98,8 +97,8 @@ export class ComplaintManagementComponent implements OnInit {
 
   openUpdateDialog(complaint: Complaint): void {
     const dialogRef = this.dialog.open(UpdateComplaintDialogComponent, {
-      width: '480px',
-      data: { complaint, allowAssign: this.allowAssign }
+      width: '500px',
+      data: { complaint }
     });
     dialogRef.afterClosed().subscribe((updated) => {
       if (updated) {
