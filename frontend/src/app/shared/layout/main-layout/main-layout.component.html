@@ -37,35 +37,36 @@
     <div class="main-view">
       <router-outlet></router-outlet>
     </div>
-    <footer class="app-footer">
-      <div class="footer-container">
-        <div class="footer-column brand-column">
-          <div class="brand-header">
-            <mat-icon class="brand-icon">bolt</mat-icon>
-            <span class="brand-title">Electricity Billing</span>
-          </div>
-          <p>Delivering reliable power and seamless billing services to our customers everyday.</p>
-        </div>
-
-        <div class="footer-column links-column">
-          <h3>Quick Links</h3>
-          <ul>
-            @for (item of navItems(); track item.path) {
-            <li><a [routerLink]="item.path">{{ item.label }}</a></li>
-            }
-          </ul>
-        </div>
-
-        <div class="footer-column contact-column">
-          <h3>Contact Us</h3>
-          <p><mat-icon>location_on</mat-icon> 123 Power Grid Avenue, Cityville</p>
-          <p><mat-icon>phone</mat-icon> +1 800 555 0199</p>
-          <p><mat-icon>email</mat-icon> support&#64;electricitybill.com</p>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <span>&copy; {{ currentYear }} Electricity Billing System. All rights reserved.</span>
-      </div>
-    </footer>
   </mat-sidenav-content>
 </mat-sidenav-container>
+
+<footer class="app-footer">
+  <div class="footer-container">
+    <div class="footer-column brand-column">
+      <div class="brand-header">
+        <mat-icon class="brand-icon">bolt</mat-icon>
+        <span class="brand-title">Electricity Billing</span>
+      </div>
+      <p>Delivering reliable power and seamless billing services to our customers everyday.</p>
+    </div>
+
+    <div class="footer-column links-column">
+      <h3>Quick Links</h3>
+      <ul>
+        @for (item of navItems(); track item.path) {
+        <li><a [routerLink]="item.path">{{ item.label }}</a></li>
+        }
+      </ul>
+    </div>
+
+    <div class="footer-column contact-column">
+      <h3>Contact Us</h3>
+      <p><mat-icon>location_on</mat-icon> 123 Power Grid Avenue, Cityville</p>
+      <p><mat-icon>phone</mat-icon> +1 800 555 0199</p>
+      <p><mat-icon>email</mat-icon> support&#64;electricitybill.com</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; {{ currentYear }} Electricity Billing System. All rights reserved.</span>
+  </div>
+</footer>

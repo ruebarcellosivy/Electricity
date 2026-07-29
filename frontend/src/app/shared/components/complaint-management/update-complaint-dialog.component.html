@@ -1,6 +1,16 @@
-<h2 mat-dialog-title>Update Complaint - {{ data.complaint.complaintNumber }}</h2>
+<h2 mat-dialog-title>Act on Complaint - {{ data.complaint.complaintNumber }}</h2>
 <mat-dialog-content>
-  <p class="complaint-desc">{{ data.complaint.description }}</p>
+  <div class="complaint-details">
+    <div class="detail-row"><span>Customer:</span> <strong>{{ data.complaint.customerName }} ({{ data.complaint.consumerNumber }})</strong></div>
+    <div class="detail-row"><span>Type:</span> <strong>{{ data.complaint.complaintType.replace('_', ' ') }}</strong></div>
+    <div class="detail-row"><span>Submitted:</span> <strong>{{ data.complaint.createdAt | date:'mediumDate' }}</strong></div>
+    <div class="detail-row description-row">
+      <span>Description:</span>
+      <p class="complaint-desc">{{ data.complaint.description }}</p>
+    </div>
+  </div>
+  <mat-divider></mat-divider>
+
   <form [formGroup]="form" class="update-form">
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Status</mat-label>
@@ -25,6 +35,6 @@
 <mat-dialog-actions align="end">
   <button mat-button (click)="cancel()">Cancel</button>
   <button mat-flat-button color="primary" [disabled]="submitting()" (click)="submit()">
-    {{ submitting() ? 'Updating...' : 'Update' }}
+    {{ submitting() ? 'Saving...' : 'Save' }}
   </button>
 </mat-dialog-actions>

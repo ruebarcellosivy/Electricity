@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
 import { ComplaintService } from '../../../core/services/complaint.service';
 import { COMPLAINT_STATUSES } from '../../../core/models/enums';
 import { Complaint } from '../../../core/models/complaint.model';
@@ -18,7 +19,7 @@ export interface UpdateComplaintDialogData {
   selector: 'app-update-complaint-dialog',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, MatDialogModule, MatFormFieldModule, MatSelectModule,
-    MatInputModule, MatButtonModule],
+    MatInputModule, MatButtonModule, MatDividerModule],
   templateUrl: './update-complaint-dialog.component.html',
   styleUrl: './update-complaint-dialog.component.scss'
 })
