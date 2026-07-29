@@ -66,12 +66,11 @@ export class AdminBillListComponent implements OnInit {
   }
 
   export(format: 'csv' | 'pdf'): void {
-    if (!this.consumerNumber()) return;
-    this.billService.exportBillHistory(this.consumerNumber(), format).subscribe((blob) => {
+    this.billService.exportBillHistory(this.consumerNumber() || '', format).subscribe((blob) => {
       const url = window.URL.createObjectURL(blob);
       const anchor = document.createElement('a');
       anchor.href = url;
-      anchor.download = `bill-history-${this.consumerNumber()}.${format}`;
+      anchor.download = `bill-history${this.consumerNumber() ? '-' + this.consumerNumber() : ''}.${format}`;
       anchor.click();
       window.URL.revokeObjectURL(url);
     });

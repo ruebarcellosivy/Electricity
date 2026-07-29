@@ -25,10 +25,10 @@
         <mat-icon>search</mat-icon> Search
       </button>
       <span class="spacer"></span>
-      <button mat-stroked-button (click)="export('csv')" [disabled]="!consumerNumber()">
+      <button mat-stroked-button (click)="export('csv')">
         <mat-icon>download</mat-icon> CSV
       </button>
-      <button mat-stroked-button (click)="export('pdf')" [disabled]="!consumerNumber()">
+      <button mat-stroked-button (click)="export('pdf')">
         <mat-icon>download</mat-icon> PDF
       </button>
     </div>
@@ -85,9 +85,9 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>Actions</th>
           <td mat-cell *matCellDef="let b">
-            @if (isOverdue(b) && b.connectionStatus === 'ACTIVE') {
+            @if (isOverdue(b) && b.connectionStatus === 'CONNECTED') {
               <button mat-stroked-button color="warn" (click)="disconnect(b)">Disconnect</button>
-            } @if (b.consumer.connectionStatus === 'DISCONNECTED') {
+            } @if (b.connectionStatus === 'DISCONNECTED') {
               <mat-chip class="status-danger">Disconnected</mat-chip>
             }
           </td>

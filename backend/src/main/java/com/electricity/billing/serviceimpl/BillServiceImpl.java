@@ -172,21 +172,35 @@ public class BillServiceImpl implements BillService {
     @Transactional(readOnly = true)
     @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
     public byte[] exportBillHistory(String consumerNumber, String format) {
-        Consumer consumer = findConsumerOrThrow(consumerNumber);
-        assertConsumerAccessible(consumer);
-        List<Bill> bills = billRepository.findByConsumer_ConsumerNumberOrderByBillDateDesc(consumerNumber);
+        List<Bill> bills;
+        String titlePrefix;
+        if (consumerNumber == null || consumerNumber.isBlank()) {
+            var authentication = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication();
+            boolean isAdmin = authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+            if (!isAdmin) {
+                throw new AccessDeniedException("Consumer number is required for customers.");
+            }
+            bills = billRepository.findAll(Sort.by(Sort.Direction.DESC, "billDate"));
+            titlePrefix = "All Bills";
+        } else {
+            Consumer consumer = findConsumerOrThrow(consumerNumber);
+            assertConsumerAccessible(consumer);
+            bills = billRepository.findByConsumer_ConsumerNumberOrderByBillDateDesc(consumerNumber);
+            titlePrefix = "Consumer " + consumerNumber;
+        }
+
         if ("pdf".equalsIgnoreCase(format)) {
             List<String[]> rows = new ArrayList<>();
             for (Bill b : bills) {
                 rows.add(new String[]{b.getBillNumber(), b.getBillingPeriod() + " | Due " + b.getDueDate()
                         + " | Amount " + b.getPayableAmount() + " | " + b.getStatus()});
             }
-            return PdfGeneratorUtil.generateDocument("Bill History - Consumer " + consumerNumber, rows);
+            return PdfGeneratorUtil.generateDocument("Bill History - " + titlePrefix, rows);
         }
-        List<String> headers = List.of("Bill Number", "Billing Period", "Bill Date", "Due Date", "Bill Amount",
+        List<String> headers = List.of("Bill Number", "Consumer Number", "Billing Period", "Bill Date", "Due Date", "Bill Amount",
                 "Late Fee", "Status", "Payment Date");
         String csv = CsvExportUtil.toCsv(headers, bills, b -> List.of(
-                b.getBillNumber(), b.getBillingPeriod(), b.getBillDate().toString(), b.getDueDate().toString(),
+                b.getBillNumber(), b.getConsumer().getConsumerNumber(), b.getBillingPeriod(), b.getBillDate().toString(), b.getDueDate().toString(),
                 b.getBillAmount().toString(), b.getLateFee().toString(), b.getStatus().toString(),
                 b.getPaymentDate() == null ? "" : b.getPaymentDate().toString()));
         return csv.getBytes(StandardCharsets.UTF_8);

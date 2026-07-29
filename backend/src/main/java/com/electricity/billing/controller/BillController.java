@@ -71,10 +71,10 @@ public class BillController {
     }
 
     @GetMapping("/export")
-    public ResponseEntity<byte[]> exportBillHistory(@RequestParam String consumerNumber,
+    public ResponseEntity<byte[]> exportBillHistory(@RequestParam(required = false) String consumerNumber,
                                                      @RequestParam(defaultValue = "csv") String format) {
         byte[] content = billService.exportBillHistory(consumerNumber, format);
-        String filename = "bill-history-" + consumerNumber + (format.equalsIgnoreCase("pdf") ? ".pdf" : ".csv");
+        String filename = "bill-history" + (consumerNumber != null && !consumerNumber.isBlank() ? "-" + consumerNumber : "") + (format.equalsIgnoreCase("pdf") ? ".pdf" : ".csv");
         MediaType mediaType = format.equalsIgnoreCase("pdf") ? MediaType.APPLICATION_PDF : MediaType.parseMediaType("text/csv");
         return ResponseEntity.ok()
                 .contentType(mediaType)
