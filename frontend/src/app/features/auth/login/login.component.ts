@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
@@ -20,6 +21,7 @@ export class LoginComponent {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly snackBar = inject(MatSnackBar);
 
   readonly hidePassword = signal(true);
   readonly submitting = signal(false);
@@ -43,9 +45,11 @@ export class LoginComponent {
       next: (response) => {
         this.submitting.set(false);
         if (response.mustChangePassword) {
+          this.snackBar.open('Please change your password', 'Close', { duration: 3000 });
           this.router.navigate(['/change-password']);
           return;
         }
+        this.snackBar.open('Successfully signed in', 'Close', { duration: 3000 });
         switch (response.role) {
           case 'ADMIN':
             this.router.navigate(['/admin/customers']);

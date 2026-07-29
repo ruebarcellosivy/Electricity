@@ -1,6 +1,7 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators, FormControl } from '@angular/forms';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -9,6 +10,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { CustomValidators } from '../../../shared/validators/custom-validators';
 import { BillService } from '../../../core/services/bill.service';
 import { ConsumerService } from '../../../core/services/consumer.service';
@@ -28,12 +30,27 @@ export class AddBillComponent implements OnInit {
   private readonly billService = inject(BillService);
   private readonly consumerService = inject(ConsumerService);
   private readonly router = inject(Router);
+  private readonly snackBar = inject(MatSnackBar);
 
   readonly submitting = signal(false);
   readonly created = signal<Bill | null>(null);
   
   readonly consumers = signal<Consumer[]>([]);
   readonly billingPeriods = signal<string[]>([]);
+  readonly maxDate = new Date();
+
+  readonly searchControl = new FormControl('');
+  private readonly searchValue = toSignal(this.searchControl.valueChanges, { initialValue: '' });
+
+  readonly filteredConsumers = computed(() => {
+    const search = this.searchValue()?.toLowerCase() || '';
+    const list = this.consumers();
+    if (!search) return list;
+    return list.filter(c => 
+      c.consumerNumber.toLowerCase().includes(search) || 
+      c.customerName.toLowerCase().includes(search)
+    );
+  });
 
   readonly form = this.fb.nonNullable.group({
     consumerNumber: ['', [Validators.required, CustomValidators.consumerNumber()]],
@@ -57,11 +74,11 @@ export class AddBillComponent implements OnInit {
     const periods: string[] = [];
     const now = new Date();
     const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-    for (let i = -6; i <= 6; i++) {
+    for (let i = -11; i <= 0; i++) {
       const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
       periods.push(`${months[d.getMonth()]}-${d.getFullYear()}`);
     }
-    return periods;
+    return periods.reverse();
   }
 
   submit(): void {
@@ -84,6 +101,7 @@ export class AddBillComponent implements OnInit {
       next: (bill) => {
         this.submitting.set(false);
         this.created.set(bill);
+        this.snackBar.open('Bill generated successfully', 'Close', { duration: 3000 });
       },
       error: () => this.submitting.set(false)
     });

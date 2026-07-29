@@ -62,6 +62,7 @@ export class RegisterComponent {
       next: (response) => {
         this.submitting.set(false);
         this.successResult.set(response);
+        this.snackBar.open('Registration successful!', 'Close', { duration: 4000 });
       },
       error: () => this.submitting.set(false)
     });

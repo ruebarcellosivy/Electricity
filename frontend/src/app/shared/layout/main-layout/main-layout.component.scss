@@ -1,16 +1,22 @@
 .app-toolbar {
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 20;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  background: var(--surface-color) !important;
+  color: var(--text-primary) !important;
 
   .brand-icon {
     margin-left: 8px;
+    color: var(--primary-color);
   }
 
   .brand-title {
-    margin-left: 8px;
-    font-size: 1.1rem;
-    font-weight: 500;
+    margin-left: 12px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+    color: var(--text-primary);
   }
 
   .spacer {
@@ -19,21 +25,176 @@
 }
 
 .app-container {
-  height: calc(100vh - 64px);
+  display: flex !important;
+  flex-direction: row;
+  align-items: flex-start; // So sticky works correctly
+  height: auto !important;
+  min-height: calc(100vh - 64px);
+  overflow: visible !important;
+  position: relative;
+  background: var(--bg-color);
 }
 
 .app-sidenav {
+  position: sticky !important;
+  top: 64px;
+  height: calc(100vh - 64px) !important;
   width: 260px;
+  flex-shrink: 0;
+  background-color: var(--surface-color);
+  border-right: 1px solid rgba(0,0,0,0.06) !important;
+  padding-top: 16px;
+  z-index: 5;
+  transform: none !important;
+  visibility: visible !important;
+}
+
+.modern-nav {
+  // Removed sticky from inner nav
 }
 
 .app-content {
-  padding: 24px;
-  background: var(--mat-app-background-color, #f5f6fa);
+  position: static !important;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: auto !important;
+  overflow: visible !important;
+  margin-left: 0 !important; // Space handled by flex layout now
+  padding: 16px 24px 0 8px;
+}
+
+.main-view {
+  flex: 1;
+  padding: 0;
+  margin-bottom: 40px;
+  max-width: 1200px;
+  margin: 0 auto 40px auto;
+  width: 100%;
+}
+
+.app-footer {
+  background: #ffffff;
+  color: rgba(0, 0, 0, 0.87);
+  padding: 40px 24px 20px;
+  margin-top: auto;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+
+  .footer-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: 32px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .footer-column {
+    h3 {
+      font-size: 1.1rem;
+      margin-bottom: 16px;
+      color: var(--primary-color);
+      font-weight: 500;
+      margin-top: 0;
+    }
+
+    p {
+      margin-bottom: 12px;
+      line-height: 1.5;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(0, 0, 0, 0.6);
+
+      mat-icon {
+        font-size: 1.1rem;
+        height: 1.1rem;
+        width: 1.1rem;
+        color: var(--primary-color);
+      }
+    }
+  }
+
+  .brand-column {
+    .brand-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      color: var(--primary-color);
+
+      .brand-icon {
+        color: #ffc107;
+      }
+
+      .brand-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+      }
+    }
+
+    p {
+      color: rgba(0, 0, 0, 0.6);
+    }
+  }
+
+  .links-column {
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        margin-bottom: 12px;
+
+        a {
+          color: rgba(0, 0, 0, 0.6);
+          text-decoration: none;
+          font-size: 0.9rem;
+          transition: color 0.2s;
+
+          &:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+  }
+
+  .footer-bottom {
+    text-align: center;
+    padding-top: 20px;
+    font-size: 0.85rem;
+    color: rgba(0, 0, 0, 0.54);
+  }
 }
 
 .active-link {
-  background: rgba(63, 81, 181, 0.1);
+  background: rgba(74, 20, 140, 0.08);
+  /* Primary color low opacity */
+  border-right: 3px solid var(--primary-color);
   font-weight: 600;
+  color: var(--primary-color) !important;
+  border-radius: 0 16px 16px 0;
+  margin-right: 16px;
+
+  mat-icon {
+    color: var(--primary-color) !important;
+  }
+}
+
+.mat-mdc-list-item {
+  border-radius: 0 16px 16px 0;
+  margin-right: 16px;
+  margin-bottom: 4px;
+  transition: all 0.2s ease;
+
+  &:hover:not(.active-link) {
+    background: rgba(0, 0, 0, 0.02);
+  }
 }
 
 .menu-user-info {
@@ -51,7 +212,16 @@
     width: 220px;
   }
 
-  .app-content {
+  .main-view {
     padding: 12px;
+  }
+
+  .app-footer {
+    padding: 24px 16px 16px;
+
+    .footer-container {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
   }
 }

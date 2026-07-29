@@ -66,16 +66,21 @@
         <ng-container matColumnDef="connectionStatus">
           <th mat-header-cell *matHeaderCellDef>Connection Status</th>
           <td mat-cell *matCellDef="let c">
-            <mat-chip [color]="c.connectionStatus === 'CONNECTED' ? 'primary' : 'warn'" selected>{{ c.connectionStatus }}</mat-chip>
+            <mat-chip [ngClass]="c.connectionStatus === 'CONNECTED' ? 'status-success' : 'status-danger'">{{ c.connectionStatus }}</mat-chip>
           </td>
         </ng-container>
         <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef>Disconnect / Reconnect</th>
+          <th mat-header-cell *matHeaderCellDef>Action</th>
           <td mat-cell *matCellDef="let c">
-            <mat-radio-group [value]="c.connectionStatus" (change)="onConnectionStatusChange($event, c)">
-              <mat-radio-button value="DISCONNECTED">Disconnect</mat-radio-button>
-              <mat-radio-button value="CONNECTED">Reconnect</mat-radio-button>
-            </mat-radio-group>
+            @if (c.connectionStatus === 'CONNECTED') {
+              <button mat-stroked-button color="warn" (click)="onConnectionStatusChangeAction('DISCONNECT', c)">
+                Disconnect
+              </button>
+            } @else {
+              <button mat-stroked-button color="primary" (click)="onConnectionStatusChangeAction('RECONNECT', c)">
+                Reconnect
+              </button>
+            }
           </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="columns"></tr>

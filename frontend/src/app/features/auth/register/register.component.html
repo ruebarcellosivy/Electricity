@@ -1,151 +1,175 @@
 @if (successResult(); as result) {
-  <mat-card class="register-card">
-    <mat-card-content class="success-panel">
-      <mat-icon class="success-icon">check_circle</mat-icon>
-      <h2>Registration Successful</h2>
-      <p>{{ result.message }}</p>
-      <div class="summary-row"><span>Customer ID</span><strong>{{ result.customerCode }}</strong></div>
-      <div class="summary-row"><span>Name</span><strong>{{ result.fullName }}</strong></div>
-      <div class="summary-row"><span>Email</span><strong>{{ result.email }}</strong></div>
-      <button mat-flat-button color="primary" class="full-width" (click)="goToLogin()">Go to Login</button>
-    </mat-card-content>
-  </mat-card>
+  <div class="split-layout">
+    <div class="branding-side">
+      <div class="branding-content">
+        <mat-icon class="huge-icon">bolt</mat-icon>
+        <h1>Electricity Billing System</h1>
+        <p>Join thousands of customers managing their electricity effortlessly.</p>
+      </div>
+    </div>
+    <div class="form-side">
+      <div class="form-container success-container">
+        <div class="success-panel">
+          <mat-icon class="success-icon">check_circle</mat-icon>
+          <h2>Registration Successful!</h2>
+          <p>{{ result.message }}</p>
+          <div class="summary-card">
+            <div class="summary-row"><span>Customer ID</span><strong>{{ result.customerCode }}</strong></div>
+            <div class="summary-row"><span>Name</span><strong>{{ result.fullName }}</strong></div>
+            <div class="summary-row"><span>Email</span><strong>{{ result.email }}</strong></div>
+          </div>
+          <button mat-flat-button color="primary" class="full-width submit-btn" (click)="goToLogin()">Proceed to Login</button>
+        </div>
+      </div>
+    </div>
+  </div>
 } @else {
-  <mat-card class="register-card">
-    <mat-card-header>
-      <mat-card-title>Create Your Account</mat-card-title>
-      <mat-card-subtitle>Register with your Consumer Number to get started</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-      <form [formGroup]="form" (ngSubmit)="submit()" class="auth-form">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Consumer Number</mat-label>
-          <input matInput formControlName="consumerNumber" placeholder="e.g. CON123" />
-          @if (form.controls.consumerNumber.touched && form.controls.consumerNumber.hasError('required')) {
-            <mat-error>Please enter a valid Consumer Number.</mat-error>
-          }
-          @if (form.controls.consumerNumber.touched && form.controls.consumerNumber.hasError('consumerNumber')) {
-            <mat-error>Consumer Number must contain exactly 13 digits.</mat-error>
-          }
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Full Name</mat-label>
-          <input matInput formControlName="fullName" maxlength="50" placeholder="As per official records" />
-          @if (form.controls.fullName.touched && form.controls.fullName.hasError('required')) {
-            <mat-error>Full name cannot be empty.</mat-error>
-          }
-          @if (form.controls.fullName.touched && form.controls.fullName.hasError('nameOnly')) {
-            <mat-error>Full name should contain only letters.</mat-error>
-          }
-          @if (form.controls.fullName.touched && form.controls.fullName.hasError('maxlength')) {
-            <mat-error>Full name cannot exceed 50 characters.</mat-error>
-          }
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Address</mat-label>
-          <textarea matInput formControlName="address" rows="2" maxlength="200" placeholder="Full billing address"></textarea>
-          @if (form.controls.address.touched && form.controls.address.hasError('required')) {
-            <mat-error>Address is required.</mat-error>
-          }
-          @if (form.controls.address.touched && form.controls.address.hasError('minlength')) {
-            <mat-error>Address must be at least 10 characters.</mat-error>
-          }
-        </mat-form-field>
-
-        <div class="two-col">
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Email</mat-label>
-            <input matInput type="email" formControlName="email" placeholder="you@example.com" />
-            @if (form.controls.email.touched && form.controls.email.hasError('required')) {
-              <mat-error>Email is required.</mat-error>
-            }
-            @if (form.controls.email.touched && form.controls.email.hasError('email')) {
-              <mat-error>Please enter a valid email address.</mat-error>
-            }
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Mobile Number</mat-label>
-            <input matInput formControlName="mobileNumber" maxlength="10" placeholder="10-digit mobile number" />
-            @if (form.controls.mobileNumber.touched && form.controls.mobileNumber.hasError('required')) {
-              <mat-error>Mobile number is invalid.</mat-error>
-            }
-            @if (form.controls.mobileNumber.touched && form.controls.mobileNumber.hasError('mobileNumber')) {
-              <mat-error>Mobile number is invalid.</mat-error>
-            }
-          </mat-form-field>
+  <div class="split-layout">
+    <div class="branding-side">
+      <div class="branding-content">
+        <mat-icon class="huge-icon">bolt</mat-icon>
+        <h1>Electricity Billing System</h1>
+        <p>Join thousands of customers managing their electricity effortlessly. Secure, fast, and reliable.</p>
+      </div>
+    </div>
+    <div class="form-side scrollable-side">
+      <div class="form-container register-container">
+        <div class="form-header">
+          <h2>Create Account</h2>
+          <p>Register with your Consumer Number to get started</p>
         </div>
-
-        <div class="two-col">
+        
+        <form [formGroup]="form" (ngSubmit)="submit()" class="auth-form">
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Customer Type</mat-label>
-            <mat-select formControlName="customerType">
-              @for (type of customerTypes; track type) {
-                <mat-option [value]="type">{{ type }}</mat-option>
+            <mat-label>Consumer Number</mat-label>
+            <input matInput formControlName="consumerNumber" placeholder="e.g. CON123" />
+            @if (form.controls.consumerNumber.touched && form.controls.consumerNumber.hasError('required')) {
+              <mat-error>Please enter a valid Consumer Number.</mat-error>
+            }
+            @if (form.controls.consumerNumber.touched && form.controls.consumerNumber.hasError('consumerNumber')) {
+              <mat-error>Consumer Number must contain exactly 13 digits.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Full Name</mat-label>
+            <input matInput formControlName="fullName" maxlength="50" placeholder="As per official records" />
+            @if (form.controls.fullName.touched && form.controls.fullName.hasError('required')) {
+              <mat-error>Full name cannot be empty.</mat-error>
+            }
+            @if (form.controls.fullName.touched && form.controls.fullName.hasError('nameOnly')) {
+              <mat-error>Full name should contain only letters.</mat-error>
+            }
+            @if (form.controls.fullName.touched && form.controls.fullName.hasError('maxlength')) {
+              <mat-error>Full name cannot exceed 50 characters.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Address</mat-label>
+            <textarea matInput formControlName="address" rows="2" maxlength="200" placeholder="Full billing address"></textarea>
+            @if (form.controls.address.touched && form.controls.address.hasError('required')) {
+              <mat-error>Address is required.</mat-error>
+            }
+            @if (form.controls.address.touched && form.controls.address.hasError('minlength')) {
+              <mat-error>Address must be at least 10 characters.</mat-error>
+            }
+          </mat-form-field>
+
+          <div class="two-col">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Email</mat-label>
+              <input matInput type="email" formControlName="email" placeholder="you@example.com" />
+              @if (form.controls.email.touched && form.controls.email.hasError('required')) {
+                <mat-error>Email is required.</mat-error>
               }
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Electrical Section</mat-label>
-            <mat-select formControlName="electricalSection">
-              @for (section of electricalSections; track section) {
-                <mat-option [value]="section">{{ section }}</mat-option>
+              @if (form.controls.email.touched && form.controls.email.hasError('email')) {
+                <mat-error>Please enter a valid email address.</mat-error>
               }
-            </mat-select>
-          </mat-form-field>
-        </div>
+            </mat-form-field>
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>User ID</mat-label>
-          <input matInput formControlName="userId" placeholder="5-20 characters, used to log in" />
-          @if (form.controls.userId.touched && form.controls.userId.hasError('required')) {
-            <mat-error>User ID is required.</mat-error>
-          }
-          @if (form.controls.userId.touched && (form.controls.userId.hasError('minlength') || form.controls.userId.hasError('maxlength'))) {
-            <mat-error>User ID must be between 5 and 20 characters.</mat-error>
-          }
-        </mat-form-field>
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Mobile Number</mat-label>
+              <input matInput formControlName="mobileNumber" maxlength="10" placeholder="10-digit mobile number" />
+              @if (form.controls.mobileNumber.touched && form.controls.mobileNumber.hasError('required')) {
+                <mat-error>Mobile number is invalid.</mat-error>
+              }
+              @if (form.controls.mobileNumber.touched && form.controls.mobileNumber.hasError('mobileNumber')) {
+                <mat-error>Mobile number is invalid.</mat-error>
+              }
+            </mat-form-field>
+          </div>
 
-        <div class="two-col">
+          <div class="two-col">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Customer Type</mat-label>
+              <mat-select formControlName="customerType">
+                @for (type of customerTypes; track type) {
+                  <mat-option [value]="type">{{ type }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Electrical Section</mat-label>
+              <mat-select formControlName="electricalSection">
+                @for (section of electricalSections; track section) {
+                  <mat-option [value]="section">{{ section }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+
           <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Password</mat-label>
-            <input matInput [type]="hidePassword() ? 'password' : 'text'" formControlName="password" />
-            <button mat-icon-button matSuffix type="button" (click)="togglePassword('password')">
-              <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
-            </button>
-            @if (form.controls.password.touched && form.controls.password.hasError('required')) {
-              <mat-error>Password is required.</mat-error>
+            <mat-label>User ID</mat-label>
+            <input matInput formControlName="userId" placeholder="5-20 characters, used to log in" />
+            @if (form.controls.userId.touched && form.controls.userId.hasError('required')) {
+              <mat-error>User ID is required.</mat-error>
             }
-            @if (form.controls.password.touched && form.controls.password.hasError('strongPassword')) {
-              <mat-error>Min 8 characters, with uppercase, lowercase and a special character.</mat-error>
+            @if (form.controls.userId.touched && (form.controls.userId.hasError('minlength') || form.controls.userId.hasError('maxlength'))) {
+              <mat-error>User ID must be between 5 and 20 characters.</mat-error>
             }
           </mat-form-field>
 
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Confirm Password</mat-label>
-            <input matInput [type]="hideConfirmPassword() ? 'password' : 'text'" formControlName="confirmPassword" />
-            <button mat-icon-button matSuffix type="button" (click)="togglePassword('confirm')">
-              <mat-icon>{{ hideConfirmPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
-            </button>
-            @if (form.controls.confirmPassword.touched && form.controls.confirmPassword.hasError('required')) {
-              <mat-error>Please confirm your password.</mat-error>
-            }
-            @if (form.controls.confirmPassword.touched && form.controls.confirmPassword.hasError('mismatch')) {
-              <mat-error>Passwords do not match.</mat-error>
-            }
-          </mat-form-field>
+          <div class="two-col">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Password</mat-label>
+              <input matInput [type]="hidePassword() ? 'password' : 'text'" formControlName="password" />
+              <button mat-icon-button matSuffix type="button" (click)="togglePassword('password')">
+                <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+              @if (form.controls.password.touched && form.controls.password.hasError('required')) {
+                <mat-error>Password is required.</mat-error>
+              }
+              @if (form.controls.password.touched && form.controls.password.hasError('strongPassword')) {
+                <mat-error>Min 8 characters, with uppercase, lowercase and a special character.</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Confirm Password</mat-label>
+              <input matInput [type]="hideConfirmPassword() ? 'password' : 'text'" formControlName="confirmPassword" />
+              <button mat-icon-button matSuffix type="button" (click)="togglePassword('confirm')">
+                <mat-icon>{{ hideConfirmPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+              </button>
+              @if (form.controls.confirmPassword.touched && form.controls.confirmPassword.hasError('required')) {
+                <mat-error>Please confirm your password.</mat-error>
+              }
+              @if (form.controls.confirmPassword.touched && form.controls.confirmPassword.hasError('mismatch')) {
+                <mat-error>Passwords do not match.</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <button mat-flat-button color="primary" class="full-width submit-btn" type="submit" [disabled]="submitting()">
+            {{ submitting() ? 'Registering...' : 'Create Account' }}
+          </button>
+        </form>
+
+        <div class="footer-link">
+          <p>Already have an account? <a routerLink="/login">Sign in</a></p>
         </div>
-
-        <button mat-flat-button color="primary" class="full-width submit-btn" type="submit" [disabled]="submitting()">
-          {{ submitting() ? 'Registering...' : 'Register' }}
-        </button>
-      </form>
-    </mat-card-content>
-    <mat-card-footer class="footer-link">
-      <p>Already have an account? <a routerLink="/login">Sign in</a></p>
-    </mat-card-footer>
-  </mat-card>
+      </div>
+    </div>
+  </div>
 }

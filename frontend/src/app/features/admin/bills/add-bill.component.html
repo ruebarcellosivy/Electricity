@@ -24,8 +24,15 @@
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Consumer Number</mat-label>
           <mat-select formControlName="consumerNumber">
-            @for (consumer of consumers(); track consumer.id) {
+            <div style="padding: 8px 16px; position: sticky; top: 0; background: white; z-index: 100; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 8px;">
+              <input placeholder="Search by ID or Name..." [formControl]="searchControl" (keydown)="$event.stopPropagation()" 
+                     style="width: 100%; border: none; outline: none; border-bottom: 1px solid #e0e0e0; padding: 8px 0; font-size: 14px; background: transparent;">
+            </div>
+            @for (consumer of filteredConsumers(); track consumer.id) {
               <mat-option [value]="consumer.consumerNumber">{{ consumer.consumerNumber }} ({{ consumer.customerName }})</mat-option>
+            }
+            @if (filteredConsumers().length === 0) {
+              <mat-option disabled>No consumers found</mat-option>
             }
           </mat-select>
           @if (form.controls.consumerNumber.touched && form.controls.consumerNumber.hasError('consumerNumber')) {
@@ -48,7 +55,7 @@
         <div class="two-col">
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Bill Date</mat-label>
-            <input matInput [matDatepicker]="billDatePicker" formControlName="billDate" />
+            <input matInput [matDatepicker]="billDatePicker" formControlName="billDate" [max]="maxDate" />
             <mat-datepicker-toggle matSuffix [for]="billDatePicker"></mat-datepicker-toggle>
             <mat-datepicker #billDatePicker></mat-datepicker>
             @if (form.controls.billDate.touched && form.controls.billDate.hasError('required')) {

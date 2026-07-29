@@ -53,6 +53,7 @@ export class MainLayoutComponent {
   private readonly snackBar = inject(MatSnackBar);
 
   readonly currentUser = this.authService.currentUser;
+  readonly currentYear = new Date().getFullYear();
 
   readonly navItems = computed<NavItem[]>(() => {
     switch (this.currentUser()?.role) {

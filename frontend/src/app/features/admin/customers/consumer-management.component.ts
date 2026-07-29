@@ -100,8 +100,7 @@ export class ConsumerManagementComponent implements OnInit {
     });
   }
 
-  onConnectionStatusChange(event: import('@angular/material/radio').MatRadioChange, consumer: Consumer): void {
-    const action = event.value === 'DISCONNECTED' ? 'DISCONNECT' : 'RECONNECT';
+  onConnectionStatusChangeAction(action: 'DISCONNECT' | 'RECONNECT', consumer: Consumer): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
         title: action === 'DISCONNECT' ? 'Disconnect Consumer' : 'Reconnect Consumer',
@@ -111,7 +110,6 @@ export class ConsumerManagementComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((confirmed) => {
       if (!confirmed) {
-        this.load(); // Revert visual state
         return;
       }
       this.consumerService.updateConnectionStatus(consumer.consumerNumber, { action }).subscribe({

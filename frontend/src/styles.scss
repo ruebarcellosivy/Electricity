@@ -1,15 +1,232 @@
 /* You can add global styles to this file, and also import other style files */
 
-/* Self-hosted fonts: no reliance on Google Fonts CDN, so the app works fully offline. */
-@import "@fontsource/roboto/300.css";
-@import "@fontsource/roboto/400.css";
-@import "@fontsource/roboto/500.css";
+/* Self-hosted modern typography */
+@import "@fontsource/inter/300.css";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
 @import "material-icons/iconfont/filled.css";
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* Premium Royal Purple Theme Overrides */
+:root {
+  --primary-color: #4a148c;
+  --primary-color-light: #7c43bd;
+  --primary-color-dark: #12005e;
+  --bg-color: #f8fafc;
+  --surface-color: #ffffff;
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --border-color: #e2e8f0;
+  
+  /* Aggressive MDC Theme Overrides */
+  --mdc-theme-primary: var(--primary-color);
+  --mat-sys-primary: var(--primary-color);
+  
+  /* Form Fields */
+  --mdc-outlined-text-field-container-shape: 12px;
+  --mdc-outlined-text-field-outline-color: var(--border-color);
+  --mdc-outlined-text-field-focus-outline-color: var(--primary-color);
+  --mdc-outlined-text-field-hover-outline-color: #cbd5e1;
+  --mdc-outlined-text-field-label-text-color: var(--text-secondary);
+  --mdc-outlined-text-field-focus-label-text-color: var(--primary-color);
+  
+  /* Buttons */
+  --mdc-filled-button-container-shape: 8px;
+  --mdc-filled-button-container-color: var(--primary-color);
+  --mdc-filled-button-label-text-color: #ffffff;
+  --mdc-outlined-button-container-shape: 8px;
+  --mdc-outlined-button-outline-color: var(--primary-color);
+  --mdc-outlined-button-label-text-color: var(--primary-color);
+  
+  /* Cards */
+  --mdc-elevated-card-container-shape: 16px;
+  --mdc-elevated-card-container-color: var(--surface-color);
+}
+
+html, body { 
+  height: 100%; 
+  background-color: var(--bg-color);
+}
+
+body { 
+  margin: 0; 
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Base animations */
+* {
+  transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* ---------------------------------
+   CARDS
+--------------------------------- */
+.mat-mdc-card {
+  border-radius: 16px !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05) !important;
+  border: 1px solid var(--border-color) !important;
+  background-color: var(--surface-color) !important;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.mat-mdc-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ---------------------------------
+   BUTTONS
+--------------------------------- */
+.mat-mdc-button, .mat-mdc-raised-button, .mat-mdc-unelevated-button, .mat-mdc-stroked-button {
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.5px !important;
+  text-transform: none !important;
+  padding: 0 24px !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.mat-mdc-raised-button, .mat-mdc-unelevated-button {
+  box-shadow: 0 4px 6px -1px rgba(74, 20, 140, 0.2), 0 2px 4px -2px rgba(74, 20, 140, 0.2) !important;
+  background-color: var(--primary-color) !important;
+  color: #fff !important;
+}
+
+.mat-mdc-raised-button:hover, .mat-mdc-unelevated-button:hover {
+  box-shadow: 0 10px 15px -3px rgba(74, 20, 140, 0.3), 0 4px 6px -4px rgba(74, 20, 140, 0.3) !important;
+  transform: translateY(-2px);
+}
+
+.mat-mdc-stroked-button {
+  border-color: var(--primary-color) !important;
+  color: var(--primary-color) !important;
+}
+.mat-mdc-stroked-button:hover {
+  background-color: rgba(74, 20, 140, 0.05) !important;
+}
+
+/* ---------------------------------
+   FORM FIELDS
+--------------------------------- */
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+.mdc-text-field--outlined {
+  background-color: #f8fafc !important; 
+  border-radius: 12px !important;
+  transition: background-color 0.2s ease !important;
+}
+
+.mdc-text-field--outlined:not(.mdc-text-field--focused):hover {
+  background-color: #f1f5f9 !important;
+}
+
+.mdc-notched-outline__leading,
+.mdc-notched-outline__notch,
+.mdc-notched-outline__trailing {
+  border-width: 1px !important;
+  border-color: var(--border-color) !important;
+}
+
+.mdc-text-field--focused .mdc-notched-outline__leading,
+.mdc-text-field--focused .mdc-notched-outline__notch,
+.mdc-text-field--focused .mdc-notched-outline__trailing {
+  border-width: 2px !important;
+  border-color: var(--primary-color) !important;
+}
+
+/* ---------------------------------
+   TABLES
+--------------------------------- */
+.mat-elevation-z1, .mat-elevation-z8 {
+  box-shadow: none !important;
+}
+
+table.mat-mdc-table {
+  background: var(--surface-color) !important;
+  border-radius: 16px !important;
+  overflow: hidden !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05) !important;
+  border: 1px solid var(--border-color) !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+}
+
+.mat-mdc-header-row {
+  background-color: #f1f5f9 !important;
+}
+
+.mat-mdc-header-cell {
+  font-weight: 600 !important;
+  color: var(--text-secondary) !important;
+  font-size: 0.85rem !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em !important;
+  padding: 16px 24px !important;
+  border-bottom: 2px solid var(--border-color) !important;
+}
+
+.mat-mdc-row {
+  transition: background-color 0.2s ease !important;
+}
+
+.mat-mdc-row:hover {
+  background-color: #f8fafc !important;
+}
+
+.mat-mdc-cell {
+  color: var(--text-primary) !important;
+  padding: 16px 24px !important;
+  font-size: 0.95rem !important;
+  border-bottom: 1px solid var(--border-color) !important;
+}
+.mat-mdc-row:last-child .mat-mdc-cell {
+  border-bottom: none !important;
+}
+
+/* ---------------------------------
+   CHIPS & DIALOGS
+--------------------------------- */
+.mat-mdc-chip {
+  border-radius: 6px !important;
+  font-weight: 500 !important;
+}
+
+/* Custom Chip Status Colors */
+.status-success {
+  --mdc-chip-elevated-container-color: #10b981;
+  --mdc-chip-flat-container-color: #10b981;
+  --mdc-chip-label-text-color: #ffffff;
+  background-color: #10b981 !important;
+  color: #ffffff !important;
+}
+
+.status-danger {
+  --mdc-chip-elevated-container-color: #ef4444;
+  --mdc-chip-flat-container-color: #ef4444;
+  --mdc-chip-label-text-color: #ffffff;
+  background-color: #ef4444 !important;
+  color: #ffffff !important;
+}
+
+.status-warning {
+  --mdc-chip-elevated-container-color: #f59e0b;
+  --mdc-chip-flat-container-color: #f59e0b;
+  --mdc-chip-label-text-color: #ffffff;
+  background-color: #f59e0b !important;
+  color: #ffffff !important;
+}
+
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  border-radius: 16px !important;
+  padding: 16px !important;
+}
 
 .snackbar-error {
-  --mdc-snackbar-container-color: #c62828;
+  --mdc-snackbar-container-color: #e11d48;
   --mdc-snackbar-supporting-text-color: #fff;
+  border-radius: 8px !important;
 }
