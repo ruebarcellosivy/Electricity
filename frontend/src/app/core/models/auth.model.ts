@@ -14,20 +14,20 @@ export interface LoginResponse {
 }
 
 export interface RegisterRequest {
-  consumerNumber: string;
   fullName: string;
   address: string;
   email: string;
   mobileNumber: string;
   customerType: string;
   electricalSection: string;
-  userId: string;
   password: string;
   confirmPassword: string;
 }
 
 export interface RegisterResponse {
+  userId: string;
   customerCode: string;
+  consumerNumber: string;
   fullName: string;
   email: string;
   message: string;

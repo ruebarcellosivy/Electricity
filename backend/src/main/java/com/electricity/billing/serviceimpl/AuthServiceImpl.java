@@ -49,18 +49,23 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public RegisterResponse register(RegisterRequest request) {
-        if (userRepository.existsByUserId(request.getUserId())) {
-            throw new DuplicateRecordException("User ID already exists. Please choose a different User ID.");
-        }
         if (customerRepository.existsByEmail(request.getEmail())) {
             throw new DuplicateRecordException("An account with this email already exists.");
         }
-        if (consumerRepository.existsByConsumerNumber(request.getConsumerNumber())) {
-            throw new DuplicateRecordException("This Consumer Number is already registered.");
+        if (customerRepository.existsByMobileNumber(request.getMobileNumber())) {
+            throw new DuplicateRecordException("An account with this mobile number already exists.");
         }
 
+        long userCount = userRepository.count();
+        String generatedUserId = "USR" + (userCount + 1);
+        while (userRepository.existsByUserId(generatedUserId)) {
+            userCount++;
+            generatedUserId = "USR" + (userCount + 1);
+        }
+
+
         User user = userRepository.save(User.builder()
-                .userId(request.getUserId())
+                .userId(generatedUserId)
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.CUSTOMER)
                 .mustChangePassword(false)
@@ -79,14 +84,17 @@ public class AuthServiceImpl implements AuthService {
                 .user(user)
                 .build());
 
+        String generatedConsumerNumber = IdGeneratorUtil.generateConsumerNumber();
         consumerRepository.save(Consumer.builder()
-                .consumerNumber(request.getConsumerNumber())
+                .consumerNumber(generatedConsumerNumber)
                 .customer(customer)
                 .connectionStatus(ConnectionStatus.CONNECTED)
                 .build());
 
         return RegisterResponse.builder()
+                .userId(generatedUserId)
                 .customerCode(customer.getCustomerCode())
+                .consumerNumber(generatedConsumerNumber)
                 .fullName(customer.getFullName())
                 .email(customer.getEmail())
                 .message("Registration successful.")

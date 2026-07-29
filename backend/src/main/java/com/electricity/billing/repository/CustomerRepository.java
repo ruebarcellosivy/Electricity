@@ -17,6 +17,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     Optional<Customer> findByCustomerCode(String customerCode);
     boolean existsByEmail(String email);
     boolean existsByEmailAndIdNot(String email, Long id);
+    boolean existsByMobileNumber(String mobileNumber);
 
     @Query("select c from Customer c where " +
             "(:electricalSection is null or c.electricalSection = :electricalSection) and " +

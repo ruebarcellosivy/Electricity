@@ -13,8 +13,6 @@ import lombok.Data;
 @PasswordMatches
 public class RegisterRequest implements PasswordConfirmable {
 
-    @NotBlank(message = "Please enter a valid Consumer Number.")
-    private String consumerNumber;
 
     @NotBlank(message = "Full name cannot be empty.")
     @Size(max = 50, message = "Full name cannot exceed 50 characters.")
@@ -39,9 +37,6 @@ public class RegisterRequest implements PasswordConfirmable {
     @NotNull(message = "Electrical section is required.")
     private ElectricalSection electricalSection;
 
-    @NotBlank(message = "User ID is required.")
-    @Size(min = 5, max = 20, message = "User ID must be between 5 and 20 characters.")
-    private String userId;
 
     @NotBlank(message = "Password is required.")
     @StrongPassword

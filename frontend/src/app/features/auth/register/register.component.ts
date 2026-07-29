@@ -35,14 +35,12 @@ export class RegisterComponent {
   readonly successResult = signal<RegisterResponse | null>(null);
 
   readonly form = this.fb.nonNullable.group({
-    consumerNumber: ['', [Validators.required, CustomValidators.consumerNumber()]],
     fullName: ['', [Validators.required, Validators.maxLength(50), CustomValidators.nameOnly()]],
     address: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(200)]],
     email: ['', [Validators.required, Validators.email]],
     mobileNumber: ['', [Validators.required, CustomValidators.mobileNumber()]],
-    customerType: ['RESIDENTIAL', [Validators.required]],
-    electricalSection: ['REGION', [Validators.required]],
-    userId: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(20)]],
+    customerType: ['', [Validators.required]],
+    electricalSection: ['', [Validators.required]],
     password: ['', [Validators.required, CustomValidators.strongPassword()]],
     confirmPassword: ['', [Validators.required]]
   }, { validators: CustomValidators.matchFields('password', 'confirmPassword') });
@@ -64,7 +62,16 @@ export class RegisterComponent {
         this.successResult.set(response);
         this.snackBar.open('Registration successful!', 'Close', { duration: 4000 });
       },
-      error: () => this.submitting.set(false)
+      error: (err) => {
+        this.submitting.set(false);
+        let errorMessage = err.error?.message || 'Registration failed. Please try again.';
+        
+        if (err.error?.fieldErrors && Object.keys(err.error.fieldErrors).length > 0) {
+          errorMessage = Object.values(err.error.fieldErrors).join(' | ');
+        }
+        
+        this.snackBar.open(errorMessage, 'Close', { duration: 6000 });
+      }
     });
   }
 

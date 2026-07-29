@@ -14,7 +14,9 @@
           <h2>Registration Successful!</h2>
           <p>{{ result.message }}</p>
           <div class="summary-card">
+            <div class="summary-row"><span>User ID</span><strong>{{ result.userId }}</strong></div>
             <div class="summary-row"><span>Customer ID</span><strong>{{ result.customerCode }}</strong></div>
+            <div class="summary-row"><span>Consumer No</span><strong>{{ result.consumerNumber }}</strong></div>
             <div class="summary-row"><span>Name</span><strong>{{ result.fullName }}</strong></div>
             <div class="summary-row"><span>Email</span><strong>{{ result.email }}</strong></div>
           </div>
@@ -36,24 +38,14 @@
       <div class="form-container register-container">
         <div class="form-header">
           <h2>Create Account</h2>
-          <p>Register with your Consumer Number to get started</p>
+          <p>Register for a new electricity connection to get started</p>
         </div>
         
-        <form [formGroup]="form" (ngSubmit)="submit()" class="auth-form">
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Consumer Number</mat-label>
-            <input matInput formControlName="consumerNumber" placeholder="e.g. CON123" />
-            @if (form.controls.consumerNumber.touched && form.controls.consumerNumber.hasError('required')) {
-              <mat-error>Please enter a valid Consumer Number.</mat-error>
-            }
-            @if (form.controls.consumerNumber.touched && form.controls.consumerNumber.hasError('consumerNumber')) {
-              <mat-error>Consumer Number must contain exactly 13 digits.</mat-error>
-            }
-          </mat-form-field>
+        <form [formGroup]="form" (ngSubmit)="submit()" class="auth-form" autocomplete="off">
 
           <mat-form-field appearance="outline" class="full-width">
             <mat-label>Full Name</mat-label>
-            <input matInput formControlName="fullName" maxlength="50" placeholder="As per official records" />
+            <input matInput formControlName="fullName" maxlength="50" placeholder="As per official records" autocomplete="off" />
             @if (form.controls.fullName.touched && form.controls.fullName.hasError('required')) {
               <mat-error>Full name cannot be empty.</mat-error>
             }
@@ -79,7 +71,7 @@
           <div class="two-col">
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Email</mat-label>
-              <input matInput type="email" formControlName="email" placeholder="you@example.com" />
+              <input matInput type="email" formControlName="email" placeholder="you@example.com" autocomplete="off" data-lpignore="true" />
               @if (form.controls.email.touched && form.controls.email.hasError('required')) {
                 <mat-error>Email is required.</mat-error>
               }
@@ -90,7 +82,7 @@
 
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Mobile Number</mat-label>
-              <input matInput formControlName="mobileNumber" maxlength="10" placeholder="10-digit mobile number" />
+              <input matInput formControlName="mobileNumber" maxlength="10" placeholder="10-digit mobile number" autocomplete="off" />
               @if (form.controls.mobileNumber.touched && form.controls.mobileNumber.hasError('required')) {
                 <mat-error>Mobile number is invalid.</mat-error>
               }
@@ -120,21 +112,11 @@
             </mat-form-field>
           </div>
 
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>User ID</mat-label>
-            <input matInput formControlName="userId" placeholder="5-20 characters, used to log in" />
-            @if (form.controls.userId.touched && form.controls.userId.hasError('required')) {
-              <mat-error>User ID is required.</mat-error>
-            }
-            @if (form.controls.userId.touched && (form.controls.userId.hasError('minlength') || form.controls.userId.hasError('maxlength'))) {
-              <mat-error>User ID must be between 5 and 20 characters.</mat-error>
-            }
-          </mat-form-field>
 
           <div class="two-col">
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Password</mat-label>
-              <input matInput [type]="hidePassword() ? 'password' : 'text'" formControlName="password" />
+              <input matInput [type]="hidePassword() ? 'password' : 'text'" formControlName="password" autocomplete="new-password" data-lpignore="true" />
               <button mat-icon-button matSuffix type="button" (click)="togglePassword('password')">
                 <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
               </button>
@@ -148,7 +130,7 @@
 
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Confirm Password</mat-label>
-              <input matInput [type]="hideConfirmPassword() ? 'password' : 'text'" formControlName="confirmPassword" />
+              <input matInput [type]="hideConfirmPassword() ? 'password' : 'text'" formControlName="confirmPassword" autocomplete="new-password" data-lpignore="true" />
               <button mat-icon-button matSuffix type="button" (click)="togglePassword('confirm')">
                 <mat-icon>{{ hideConfirmPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
               </button>
